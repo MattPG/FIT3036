@@ -1,20 +1,31 @@
 package window.attempt_1;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 
 public class Main {
-		
-	@SuppressWarnings("serial")
-	public static class MyFrame extends JFrame{
-		public MyFrame(){
-			setTitle("My Empty Frame");
-			setSize(300,200); // default size is 0,0
-			setLocation(10,200); // default is 0,0 (top left corner)
-		}
-	}
-
 	  public static void main(String[] args) {
-	    JFrame f = new MyFrame();
-	    f.setVisible(true);
+	        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+	            public void run() {
+	                createFrame("My First Window!");
+	            }
+	        });
+	  }
+	  
+	  private static void createFrame(String windowTitle){
+		  SystemConfig systemConfig = new SystemConfig();
+		  
+		  	JFrame window = new JFrame(windowTitle);
+		  	window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		    window.setSize(
+		    		(int)systemConfig.getScreenWidth(),
+		    		(int)systemConfig.getScreenHeight()
+		    		); // default size is 0,0
+
+	        //Add the ubiquitous "Hello World" label.
+	        JLabel label = new JLabel("Hello World");
+	        window.getContentPane().add(label);
+		    
+		    //window.pack();
+		    window.setVisible(true);
 	  }
 }
