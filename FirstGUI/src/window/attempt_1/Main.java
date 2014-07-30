@@ -4,15 +4,7 @@ import javax.swing.*;
 import java.sql.*;
 
 public class Main {
-	  public static void main(String[] args) {
-	        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-	            public void run() {
-	                createFrame("My First Window!");
-	            }
-	        });
-	  }
-	  
-	  private static void createFrame(String windowTitle){
+	  private static JFrame createFrame(String windowTitle){
 		  SystemConfig systemConfig = new SystemConfig();
 		  
 		  	JFrame window = new JFrame(windowTitle);
@@ -28,5 +20,15 @@ public class Main {
 		    
 		    //window.pack();
 		    window.setVisible(true);
+		    
+		    return window;
 	  }
+	  
+	  public static void main(String[] args) {
+	        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+	            public void run() {
+	                JFrame frame = createFrame("My First Window!");
+	            }
+	        });
+	  }	  
 }
