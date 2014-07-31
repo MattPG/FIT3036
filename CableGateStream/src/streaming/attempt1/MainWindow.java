@@ -1,23 +1,20 @@
 package streaming.attempt1;
 
 import java.io.BufferedReader;
-import java.util.concurrent.CountDownLatch;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-public class CSVStreamer {
+public class MainWindow {
 
 	private static SystemConfig system;
 	private static BufferedReader stream;
 	private JFrame window;
 	private static JTextArea textArea;
 	private JScrollPane scrollPane;
-
-	CountDownLatch latch = new CountDownLatch(1);
 	
-	private CSVStreamer(){  
+	private MainWindow(){  
 		system = new SystemConfig();
 		stream  = new BufferedReader(system.getCableStream());
 				
@@ -39,7 +36,7 @@ public class CSVStreamer {
 		
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 	        public void run() {
-	        	new CSVStreamer();
+	        	new MainWindow();
 	        	new StreamParser(stream, textArea, StreamParser.OPERATION.COUNT_CABLES).execute();
 	        }
 	    });		
