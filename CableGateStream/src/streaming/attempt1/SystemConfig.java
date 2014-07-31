@@ -9,7 +9,8 @@ import java.io.FileReader;
 public class SystemConfig {
 	
 	private static final String ERROR_FRAME_TITLE = "ERROR!";
-	private final String CABLES_DIRECTORY = "D:\\Users\\Matthew\\Downloads\\";
+	//private final String CABLES_DIRECTORY = "D:\\Users\\Matthew\\Downloads\\";
+	private final String CABLES_DIRECTORY = "\\\\ad.monash.edu\\home\\User009\\mpgre4\\Documents\\Documents\\Uni Work\\FIT3036\\";
 	private final String CABLES_FILENAME = "cables.csv";
 	
 	private static File cableFile = null;
@@ -25,7 +26,7 @@ public class SystemConfig {
 		cableFile = new File(CABLES_DIRECTORY + CABLES_FILENAME);
 	}
 	
-	public static FileReader getCableStream(){
+	public FileReader getCableStream(){
 		FileReader file = null;
 		try{
 			file = new FileReader(cableFile);
