@@ -14,10 +14,7 @@ public class MainWindow {
 	private static JTextArea textArea;
 	private JScrollPane scrollPane;
 	
-	private MainWindow(){  
-		system = new SystemConfig();
-		stream  = new BufferedReader(system.getCableStream());
-				
+	private MainWindow(){  				
 		// Create the window
 		window = new JFrame("Cablegate Reader");
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -36,6 +33,9 @@ public class MainWindow {
 		
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 	        public void run() {
+	        	
+	    		system = new SystemConfig();
+	    		stream  = new BufferedReader(system.getCableStream());
 	        	new MainWindow();
 	        	new StreamParser(stream, textArea, StreamParser.OPERATION.COUNT_CABLES).execute();
 	        }
