@@ -15,14 +15,11 @@ public class SystemConfig {
 	
 	private static File cableFile = null;
 	
-	private final Dimension screenSize;
-	private final int width;
-	private final int height;	
+	private static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	private static final int width = (int) screenSize.getWidth();
+	private static final int height = (int) screenSize.getHeight();	
 	
 	public SystemConfig(){	
-		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		width = (int) screenSize.getWidth();
-		height = (int) screenSize.getHeight();	
 		cableFile = new File(CABLES_DIRECTORY + CABLES_FILENAME);
 	}
 	
@@ -36,11 +33,11 @@ public class SystemConfig {
 		return file;
 	}
 	
-	public int getScreenWidth(){
+	public static int getScreenWidth(){
 		return width;
 	}
 	
-	public int getScreenHeight(){
+	public static int getScreenHeight(){
 		return height;
 	}
 	
