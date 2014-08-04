@@ -6,27 +6,33 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ParseTask implements Callable<Void>{
+public class ParseTask implements Callable<Integer>{
 	
-	private final BlockingQueue<List<String>> cableQueue;
+	private final ThreadPoolExecutor cableQueue;
+	private final BlockingQueue<String> resultQueue;
+	private final BlockingQueue<PackageCableTask> recycleQueue;
+	
 	private final BufferedReader stream;
 	private final Matcher matcher;
-
-	private int count = 0, cablecount = 1;
+	private int cableCount;
 	private List<String> currCable;
 	
-	public ParseTask(BufferedReader stream, BlockingQueue<List<String>> queue){		
+	public ParseTask(BufferedReader stream, ThreadPoolExecutor workQueue, BlockingQueue<PackageCableTask> recycleQueue, BlockingQueue<String> resultQueue){		
 		this.stream = stream;
-		cableQueue = queue; 
+		cableQueue = workQueue; 
+		this.recycleQueue = recycleQueue;
+		this.resultQueue = resultQueue;
+		
 		matcher = Pattern.compile("\"[0-9]+\"").matcher("");
-		currCable = null;
+		currCable = null; cableCount = 0; 
 	}
 	
 	@Override
-	public Void call() throws Exception {
+	public Integer call() throws Exception {
 		String currLine = readLine();
 		while(currLine != null){
 			// Start  saving the cable
@@ -41,21 +47,24 @@ public class ParseTask implements Callable<Void>{
 
 			}
 
-			if(cablecount%10000 == 0)
-				System.out.println(cablecount);	
-			cablecount++;
+			cableCount++;
 			
-			// Send cable off to be processed			
-			cableQueue.put(currCable);			
+			if(cableCount%10000 == 0)
+				System.out.println(cableCount);	
+			
+			// Send cable off to be processed 
+			if(recycleQueue.isEmpty())
+				// Create a new PCT if no old ones available
+				cableQueue.execute(new PackageCableTask(currCable, recycleQueue, resultQueue));
+			else			
+				// Re-use an old PCT that's still in memory
+				cableQueue.execute(recycleQueue.take().reset(currCable));
 		}
 		
-		System.out.println(count);
-		
-		return null;
+		return new Integer(cableCount);
 	}
 
 	private String readLine(){
-		count++;
 		String currLine = null;
 		
 		try {

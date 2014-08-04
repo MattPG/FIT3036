@@ -6,7 +6,7 @@ import javax.swing.JTextArea;
 
 public class MainWindow{
 
-	private JFrame window;
+	private static JFrame window;
 	private static JTextArea textArea;
 	private JScrollPane scrollPane;
 	
@@ -29,5 +29,9 @@ public class MainWindow{
 		return textArea;
 	}
 	
+
+	public static JFrame getWindow(){
+		return window;
+	}
 
 }
