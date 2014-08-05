@@ -21,12 +21,12 @@ public class Main {
 	
 	public static void main(String[] args) {		
 		initialise();		
+				
+		// This queue is where the PCTs place their results
+		BlockingQueue<String> resultPCTQueue = new LinkedBlockingQueue<String>();
 		
 		// This queue allows me to recycle PCTs as they finish
 		BlockingQueue<PackageCableTask> recyclePCTQueue = new LinkedBlockingQueue<PackageCableTask>();
-		
-		// This queue is where the PCTs place their results
-		BlockingQueue<String> resultPCTQueue = new LinkedBlockingQueue<String>();
 		
 		// Create the thread to handle cable.csv reading
     	CompletionService<Integer> cableProducer = new ExecutorCompletionService<Integer>(Executors.newSingleThreadExecutor());
