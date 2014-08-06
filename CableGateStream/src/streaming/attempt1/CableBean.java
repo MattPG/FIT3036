@@ -1,4 +1,4 @@
-package cablegate.stream;
+package streaming.attempt1;
 
 import java.util.Date;
 

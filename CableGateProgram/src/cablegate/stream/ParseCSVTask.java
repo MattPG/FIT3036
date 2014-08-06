@@ -18,8 +18,7 @@ public class ParseCSVTask implements Runnable{
 	@Override
 	public void run() {
 		myCables = csvReader.readBeans();
-		System.out.println(myCables.size());
-		System.out.println(myCables.get(myCables.size()-1));
+		System.out.println(myCables.get(myCables.size()-1).getCableNumber());
 	}
 	
 }

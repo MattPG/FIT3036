@@ -53,6 +53,7 @@ public class Main {
 			e.printStackTrace();
 		}
 		
+		TPE.shutdown();
     	//TODO: DriverManager.getConnection(SystemConfig.)
     	System.out.println("main done!");
 	}

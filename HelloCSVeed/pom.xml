@@ -1,10 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>CableGateProgram</groupId>
-  <artifactId>CableGateProgram</artifactId>
+  <groupId>HelloCSVeed</groupId>
+  <artifactId>HelloCSVeed</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  
   <build>
-    <sourceDirectory>src</sourceDirectory>
+    <sourceDirectory>src</sourceDirectory>    
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -18,22 +19,17 @@
   </build>
   
   <dependencies>
-  	<dependency>
-	    <groupId>org.csveed</groupId>
-	    <artifactId>csveed</artifactId>
-	    <version>0.4.0</version>
+	<dependency>
+		<groupId>org.csveed</groupId>
+		<artifactId>csveed</artifactId>
+		<version>0.4.0</version>
 	</dependency>
 	<dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-simple</artifactId>
-        <version>1.7.2</version>
-   	</dependency>
-   	<dependency>
-		<groupId>org.slf4j</groupId>
-		<artifactId>slf4j-ext</artifactId>
-		<version>1.7.5</version>
-	</dependency>
-   	
+	     <groupId>org.slf4j</groupId>
+	     <artifactId>slf4j-simple</artifactId>
+	     <version>1.7.2</version>
+	 </dependency>
+	 
   </dependencies>
   
 </project>

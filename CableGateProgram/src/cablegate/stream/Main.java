@@ -12,49 +12,59 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.profiler.Profiler;
+
 public class Main {
 
-	private static final int CABLE_CHUNK = 1000;
-	private static final int STRING_BUILDER_INIT_SIZE = 5000000; // 1000 cables @ 5000 chars ea.
+	private static final int CABLE_CHUNK = 10;
+	private static final int STRING_BUILDER_INIT_SIZE = CABLE_CHUNK * 7000; // 7k chars ea. (avg is 6.3k)
 	
 	private static BufferedReader stream;
-	private Reader reader;
-	
 	
 	public static void main(String[] args) {		
+		
 		getCableStream();
 		
-		StringBuilder cables = null;
-		Matcher matcher;
+		// Temp variables for iterations
 		String currLine;
+		String test;
 		int cableCount;
-
-		matcher = Pattern.compile("\"[0-9]+\"").matcher("");
-
-		currLine = readLine();
-		cables = new StringBuilder(STRING_BUILDER_INIT_SIZE);
-		for(cableCount = 0; cableCount < CABLE_CHUNK; cableCount++){
-			
-			// Get the first line which definitely matches the pattern
-			if(cableCount > 0)
-				cables.append('\n');
-			cables.append(currLine);
-
-			// Add lines until we hit the next cable (or end of file)
-			currLine = readLine();
-			while(currLine != null && !matcher.reset(currLine).lookingAt()){
-				cables.append('\n');
-				cables.append(currLine);
-				currLine = readLine();	
-			}
-
-		}
-		
-    	// Create a thread pool to parse all the individual cables and extract information
+		// Stringbuilder for appending each line optimally
+		StringBuilder cables = null;
+		// A regex that detects the start of a new cable
+		Matcher matcher = Pattern.compile("\"[0-9]+\"").matcher("");
+		// A cached thread pool for executing each cable chunk
     	ThreadPoolExecutor threadPool = (new ThreadPoolExecutor(0, Integer.MAX_VALUE, 5L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>()));
-		threadPool.execute(new ParseCSVTask(new StringReader(cables.toString())));
+		
+    	Profiler timer;
+    	
+		currLine = readLine();
+		do{		
+			cables = new StringBuilder(STRING_BUILDER_INIT_SIZE);
+	    	timer = new Profiler("Reading Cables.csv").startNested("A");
+			for(cableCount = 0; cableCount < CABLE_CHUNK; cableCount++){
+				
+				// Append the line which is the start of the pattern
+				if(cableCount > 0)
+					cables.append('\n');
+				cables.append(currLine);
+	
+				// Add lines until we hit the next cable (or end of file)
+				currLine = readLine();
+				while(currLine != null && !matcher.reset(currLine).lookingAt()){
+					cables.append('\n');
+					cables.append(currLine);
+					currLine = readLine();	
+				}
+				test = cables.toString();
+			}
+	    	// Send off this cable chunk to be parsed
+			Reader reader = new StringReader(cables.toString());
+			threadPool.execute(new ParseCSVTask(reader));
+			timer.stop().print();
+		}while(currLine != null);
 	}
-
+		
 	private static String readLine(){
 		String currLine = null;
 		
@@ -70,7 +80,7 @@ public class Main {
 	private static void getCableStream(){
 		try {
 			stream = new BufferedReader(
-					new FileReader(
+						new FileReader(
 							SystemConfig.getCableDirectory()
 							));
 		} catch (FileNotFoundException e) {
