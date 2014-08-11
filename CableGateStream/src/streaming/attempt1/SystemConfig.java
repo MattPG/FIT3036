@@ -7,30 +7,28 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 public class SystemConfig {
-	
-	//private static final String ERROR_FRAME_TITLE = "ERROR!";
-	private final String CABLES_DIRECTORY = "D:\\Users\\Matthew\\Downloads\\";
-	//private final String CABLES_DIRECTORY = "\\\\ad.monash.edu\\home\\User009\\mpgre4\\Documents\\Documents\\Uni Work\\FIT3036\\";
-	private final String CABLES_FILENAME = "cables.csv";
-	
-	private static File cableFile = null;
+
+	private static final String CURRENT_USER = System.getProperty("user.name");
+	private static String CABLES_DIRECTORY_UNI = "\\\\ad.monash.edu\\home\\User009\\mpgre4\\Documents\\Documents\\";
+	private static String CABLES_DIRECTORY_HOME = "D:\\Users\\Matthew\\Documents\\";
+	private static String CABLES_FILE_NAME = "cables.csv";
 	
 	private static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private static final int width = (int) screenSize.getWidth();
 	private static final int height = (int) screenSize.getHeight();	
 	
 	public SystemConfig(){	
-		cableFile = new File(CABLES_DIRECTORY + CABLES_FILENAME);
 	}
 	
-	public FileReader getCableStream(){
-		FileReader file = null;
-		try{
-			file = new FileReader(cableFile);
-		}catch(FileNotFoundException noFile){
-			criticalError("SystemConfig", "File not found");
-		}
-		return file;
+	public static String getCableDirectory(){
+		String directory = null;
+		
+		if(CURRENT_USER.equals("Matthew"))
+			directory = CABLES_DIRECTORY_HOME + CABLES_FILE_NAME;
+		else if(CURRENT_USER.equals("Matthew Paul Greenwood"))
+			directory = CABLES_DIRECTORY_UNI + CABLES_FILE_NAME;
+		
+		return directory;
 	}
 	
 	public static int getScreenWidth(){

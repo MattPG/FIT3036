@@ -1,6 +1,8 @@
 package streaming.attempt1;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletionService;
 import java.util.concurrent.CountDownLatch;
@@ -23,10 +25,10 @@ public class Main {
 		initialise();		
 				
 		// This queue is where the PCTs place their results
-		BlockingQueue<String> resultPCTQueue = new LinkedBlockingQueue<String>();
+		BlockingQueue<CableBean> resultPCTQueue = new LinkedBlockingQueue<CableBean>();
 		
 		// This queue allows me to recycle PCTs as they finish
-		BlockingQueue<PackageCableTask> recyclePCTQueue = new LinkedBlockingQueue<PackageCableTask>();
+		BlockingQueue<ParseCSVTask> recyclePCTQueue = new LinkedBlockingQueue<ParseCSVTask>();
 		
 		// Create the thread to handle cable.csv reading
     	CompletionService<Integer> cableProducer = new ExecutorCompletionService<Integer>(Executors.newSingleThreadExecutor());
@@ -40,7 +42,7 @@ public class Main {
     	
     	while(!allCablesRead.isDone() || !resultPCTQueue.isEmpty()){
     		try {
-				MainWindow.getTextArea().append(resultPCTQueue.take() + "\n");
+				MainWindow.getTextArea().append(resultPCTQueue.take().getCableNumber() + "\n");
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -59,7 +61,6 @@ public class Main {
 	}
 	
 	private static void initialise(){		
-		SystemConfig system = new SystemConfig();
 
 		SwingUtilities.invokeLater(new Runnable() {					
 			@Override
@@ -69,7 +70,11 @@ public class Main {
 			}
 		});
 		
-		stream  = new BufferedReader(system.getCableStream());    	
+		try {
+			stream  = new BufferedReader(new FileReader(SystemConfig.getCableDirectory()));
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		}    	
     	
     	try {
 			initiator.await();
