@@ -1,4 +1,4 @@
-package cablegate.stream;
+
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -16,20 +16,16 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		ReentrantLock lock = new ReentrantLock(false);
-		
 		// Create the thread to handle cable.csv reading
     	CompletionService<Void> singleThread = new ExecutorCompletionService<Void>(Executors.newSingleThreadExecutor());
-		// A thread pool for executing each cable chunk
-    	ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(2*SystemConfig.getNumberOfCPUCores());
 		// A blocking queue to allow the cables to be written to the Database
 		BlockingQueue<CableBean> resultQueue = new ArrayBlockingQueue<CableBean>(500);		
 		
-    	Future<Void> allCablesRead = singleThread.submit(new CableCSVReader(threadPool, resultQueue));
+    	Future<Void> allCablesRead = singleThread.submit(new CableCSVReader(resultQueue));
     	int count = 0;
     	Profiler timer = new Profiler("Main.java");
     	timer.start("Adding");
-    	while(count < 251287){
+    	while(!allCablesRead.isDone() || !resultQueue.isEmpty()){
     		try {
 				resultQueue.take();
 			} catch (InterruptedException e) {
