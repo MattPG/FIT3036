@@ -20,12 +20,11 @@ public class Main {
     	CompletionService<Void> singleThread = new ExecutorCompletionService<Void>(Executors.newSingleThreadExecutor());
 		// A blocking queue to allow the cables to be written to the Database
 		BlockingQueue<CableBean> resultQueue = new ArrayBlockingQueue<CableBean>(500);		
-		
     	Future<Void> allCablesRead = singleThread.submit(new CableCSVReader(resultQueue));
     	int count = 0;
     	Profiler timer = new Profiler("Main.java");
     	timer.start("Adding");
-    	while(!allCablesRead.isDone() || !resultQueue.isEmpty()){
+    	while(count < 251287){
     		try {
 				resultQueue.take();
 			} catch (InterruptedException e) {

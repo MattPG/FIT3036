@@ -59,7 +59,7 @@ public class CableCSVReader implements Callable<Void>{
             while( (cable = beanReader.read(CableBean.class, header, processors)) != null ) {
             	resultQueue.put(cable);
             	count++;
-            	if(count%1000 == 0)
+            	if(count%10000 == 0)
             		System.out.println(count);
             }
                 
@@ -88,6 +88,9 @@ public class CableCSVReader implements Callable<Void>{
 							SystemConfig.getCableDirectory()
 							));
 		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			System.exit(1);
+		} catch(NullPointerException e){
 			e.printStackTrace();
 			System.exit(1);
 		}

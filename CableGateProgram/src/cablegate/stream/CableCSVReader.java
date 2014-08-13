@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CableCSVReader implements Callable<Void>{
+public class CableCSVReader implements Callable<Integer>{
 
 	private static final int CABLE_CHUNK = 50;
 	private static final int STRING_BUILDER_INIT_SIZE = CABLE_CHUNK * 7000; // 7k chars ea. (avg is 6.3k)
@@ -25,20 +25,20 @@ public class CableCSVReader implements Callable<Void>{
 	}
 
 	@Override
-	public Void call() {	
+	public Integer call() {	
 		
 		// Temp variables for iterations
 		String currLine;
-		int cableCount;
+		int cableCount, totalCableCount;
 		// Stringbuilder for appending each line optimally
 		StringBuilder cables = null;
 		// A regex that detects the start of a new cable
 		Matcher matcher = Pattern.compile("\"[0-9]+\"").matcher("");   	
-		// Profiler for simple stopwatch methods
 		
 		// Open up the buffered streamer
 		getCableStream();
 		
+		totalCableCount = 0;
 		try{
 			currLine = readLine();
 			while(currLine != null){		
@@ -63,8 +63,10 @@ public class CableCSVReader implements Callable<Void>{
 					// Finished reading a full cable, increment the counter
 					cableCount++;
 				}
+		    	
 		    	// Send off this cable chunk to be parsed
 				threadPool.execute(new ParseCSVTask(cables, resultQueue));
+				totalCableCount += cableCount;
 			}
 			
     	}finally{ 
@@ -77,7 +79,7 @@ public class CableCSVReader implements Callable<Void>{
 				}
     	}
 
-		return null;
+		return totalCableCount;
 	}
 		
 	private static String readLine(){
