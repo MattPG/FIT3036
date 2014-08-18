@@ -2,7 +2,26 @@ package cablegate.stream;
 
 
 public class CableBean {
+	private static final String[] HeaderArray =	{	"cableNumber",
+													"dateTime", 
+													"cableID",
+													"sender",
+													"classification",
+													"references",
+													"mailingList",
+													"cableText" 
+												};
 	
+	// TODO: FINISH HEADERSTRING
+	private static final String HeaderString =		"cableNumber INT PRIMARY KEY NOT NULL," +
+													"dateTime" +
+													"cableID"+
+													"sender"+
+													"classification"+
+													"references"+
+													"mailingList"+
+													"cableText";
+
 	private int cableNumber;
 	
 	private String dateTime;
@@ -83,6 +102,15 @@ public class CableBean {
 		this.cableText = cableText;
 	}
 	
+	public static String[] getHeaderArray() {
+		return HeaderArray;
+	}
+
+	public static String getHeaderString() {
+		return HeaderString;
+	}
+	
+	@Override
 	public String toString(){
 		return getCableNumber() + ","
 				+ getDateTime() + ","

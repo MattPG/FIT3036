@@ -4,28 +4,35 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CableCSVReader implements Callable<Integer>{
+public class CableCSVReader implements Callable<Void>{
 
 	private static final int CABLE_CHUNK = 50;
 	private static final int STRING_BUILDER_INIT_SIZE = CABLE_CHUNK * 7000; // 7k chars ea. (avg is 6.3k)
 	
 	private static BufferedReader stream;
 	private final ThreadPoolExecutor threadPool;
+	private final ExecutorService dataBaseWriter;
 	private final BlockingQueue<CableBean> resultQueue;
 	
-	public CableCSVReader(ThreadPoolExecutor threadPool, BlockingQueue<CableBean> resultQueue) {
-		this.threadPool = threadPool;
-		this.resultQueue = resultQueue;
+	public CableCSVReader() {
+		this.dataBaseWriter = Executors.newSingleThreadExecutor();
+		this.threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(2*SystemConfig.getNumberOfCPUCores());
+		this.resultQueue = new ArrayBlockingQueue<CableBean>(500);
 	}
 
 	@Override
-	public Integer call() {	
+	public Void call() {	
 		
 		// Temp variables for iterations
 		String currLine;
@@ -35,8 +42,11 @@ public class CableCSVReader implements Callable<Integer>{
 		// A regex that detects the start of a new cable
 		Matcher matcher = Pattern.compile("\"[0-9]+\"").matcher("");   	
 		
-		// Open up the buffered streamer
+		// Open up the buffered stream to cable.csv
 		getCableStream();
+		
+		//Spawn the datbaseWriter
+		Future<Void> dataBaseWriterFuture = dataBaseWriter.submit(new CableCSVDBWriter(resultQueue));
 		
 		totalCableCount = 0;
 		try{
@@ -74,12 +84,23 @@ public class CableCSVReader implements Callable<Integer>{
     		if(stream != null)
 	    		try {
 					stream.close();
+					threadPool.shutdown();
+					dataBaseWriter.shutdown();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
     	}
-
-		return totalCableCount;
+		
+		// Make sure the whole DB creation process is finished
+		try {
+			dataBaseWriterFuture.get();
+		} catch (InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// Return to main
+		return null;
 	}
 		
 	private static String readLine(){

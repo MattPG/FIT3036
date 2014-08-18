@@ -25,17 +25,7 @@ public class ParseCSVTask implements Runnable{
 																		        new NotNull(), // mailingList
 																		        new NotNull(), // cableText
 																			};
-	private static final String[] header =	{	"cableNumber",
-												"dateTime", 
-												"cableID",
-												"sender",
-												"classification",
-												"references",
-												"mailingList",
-												"cableText" 
-											};
-	
-	
+		
 	public ParseCSVTask(StringBuilder inputBuilder, BlockingQueue<CableBean> resultQueue){
 		beanReader = new CsvBeanReader(new MyTokenizer(new StringReader(inputBuilder.toString()), CsvPreference.STANDARD_PREFERENCE), CsvPreference.STANDARD_PREFERENCE);
 		this.resultQueue = resultQueue;
@@ -47,7 +37,7 @@ public class ParseCSVTask implements Runnable{
 	        try {
 	        	
 	        	CableBean cable;
-                while( (cable = beanReader.read(CableBean.class, header, processors)) != null ) 
+                while( (cable = beanReader.read(CableBean.class, CableBean.getHeaderArray(), processors)) != null ) 
                 	resultQueue.put(cable);
 	                
 	        } catch (IOException e) {
