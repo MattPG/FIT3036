@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
@@ -34,9 +37,11 @@ public class CableCSVReader implements Callable<Void>{
 	@Override
 	public Void call() {	
 		
+		createDBandCableTable();
+		
 		// Temp variables for iterations
 		String currLine;
-		int cableCount, totalCableCount;
+		int cableCount;
 		// Stringbuilder for appending each line optimally
 		StringBuilder cables = null;
 		// A regex that detects the start of a new cable
@@ -48,7 +53,6 @@ public class CableCSVReader implements Callable<Void>{
 		//Spawn the datbaseWriter
 		Future<Void> dataBaseWriterFuture = dataBaseWriter.submit(new CableCSVDBWriter(resultQueue));
 		
-		totalCableCount = 0;
 		try{
 			currLine = readLine();
 			while(currLine != null){		
@@ -76,11 +80,10 @@ public class CableCSVReader implements Callable<Void>{
 		    	
 		    	// Send off this cable chunk to be parsed
 				threadPool.execute(new ParseCSVTask(cables, resultQueue));
-				totalCableCount += cableCount;
 			}
 			
     	}finally{ 
-    		// Make sure the stream is closed
+    		// Make sure the streams are closed
     		if(stream != null)
 	    		try {
 					stream.close();
@@ -126,5 +129,25 @@ public class CableCSVReader implements Callable<Void>{
 		}
 	}
 	
-
+	private static void createDBandCableTable(){
+		Connection con = DataBaseManager.getConnectionAndCreate(); // Connect to the database
+		try{
+			
+			// Create Cable Table
+			Statement createTableStatement = con.createStatement();
+			createTableStatement.execute("CREATE TABLE " + DataBaseManager.getTableName() + DataBaseManager.getTableColumnsCreate());
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+	}
 }

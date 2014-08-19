@@ -2,25 +2,15 @@ package cablegate.stream;
 
 
 public class CableBean {
-	private static final String[] HeaderArray =	{	"cableNumber",
+	private static final String[] HEADER_ARRAY ={	"cableNumber",
 													"dateTime", 
 													"cableID",
 													"sender",
 													"classification",
-													"references",
+													"referrals",
 													"mailingList",
 													"cableText" 
 												};
-	
-	// TODO: FINISH HEADERSTRING
-	private static final String HeaderString =		"cableNumber INT PRIMARY KEY NOT NULL," +
-													"dateTime" +
-													"cableID"+
-													"sender"+
-													"classification"+
-													"references"+
-													"mailingList"+
-													"cableText";
 
 	private int cableNumber;
 	
@@ -32,7 +22,7 @@ public class CableBean {
 	
 	private String classification;
 	
-	private String references;
+	private String referrals;
 	
 	private String mailingList;
 	
@@ -58,8 +48,8 @@ public class CableBean {
 		return classification;
 	}
 
-	public String getReferences() {
-		return references;
+	public String getReferrals() {
+		return referrals;
 	}
 
 	public String getMailingList() {
@@ -90,8 +80,8 @@ public class CableBean {
 		this.classification = classification;
 	}
 
-	public void setReferences(String references) {
-		this.references = references;
+	public void setReferrals(String referrals) {
+		this.referrals = referrals;
 	}
 
 	public void setMailingList(String mailingList) {
@@ -103,13 +93,9 @@ public class CableBean {
 	}
 	
 	public static String[] getHeaderArray() {
-		return HeaderArray;
+		return HEADER_ARRAY;
 	}
 
-	public static String getHeaderString() {
-		return HeaderString;
-	}
-	
 	@Override
 	public String toString(){
 		return getCableNumber() + ","
@@ -117,7 +103,7 @@ public class CableBean {
 				+ getCableID() + ","
 				+ getSender() + ","
 				+ getClassification() + ","
-				+ getReferences() + ","
+				+ getReferrals() + ","
 				+ getMailingList();
 	}
 	
