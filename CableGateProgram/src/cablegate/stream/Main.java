@@ -16,6 +16,7 @@ public class Main {
 		File dataBase = new File(DataBaseManager.getDataBaseName());
 		
 		if(!dataBase.isDirectory()){
+			System.out.println("Creating Database...");
 	    	Profiler timer = new Profiler("Main.java");
 	    	timer.start("Adding ");
 	    	

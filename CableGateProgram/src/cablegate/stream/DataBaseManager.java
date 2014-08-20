@@ -20,7 +20,7 @@ public class DataBaseManager {
 														"CLASSIFICATION VARCHAR(15) NOT NULL,"+
 														"REFERRALS VARCHAR(200),"+
 														"MAILING_LIST VARCHAR(1000) NOT NULL,"+
-														"CABLE_TEXT VARCHAR(1000) NOT NULL)";
+														"CABLE_TEXT VARCHAR(10000) NOT NULL)";
 	
 	private static final String TABLE_COLUMNS =		"(CABLE_NUMBER," +
 													"DATE_TIME," +

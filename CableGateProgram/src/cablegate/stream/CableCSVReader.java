@@ -54,6 +54,7 @@ public class CableCSVReader implements Callable<Void>{
 		Future<Void> dataBaseWriterFuture = dataBaseWriter.submit(new CableCSVDBWriter(resultQueue));
 		
 		try{
+			System.out.println("Reading CSV File...");
 			currLine = readLine();
 			while(currLine != null){		
 				cables = new StringBuilder(STRING_BUILDER_INIT_SIZE);
@@ -130,6 +131,7 @@ public class CableCSVReader implements Callable<Void>{
 	}
 	
 	private static void createDBandCableTable(){
+		System.out.println("Instantiating DataBase...");
 		Connection con = DataBaseManager.getConnectionAndCreate(); // Connect to the database
 		try{
 			

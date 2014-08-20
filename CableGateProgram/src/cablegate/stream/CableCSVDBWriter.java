@@ -17,7 +17,8 @@ public class CableCSVDBWriter implements Callable<Void>{
 
 	@Override
 	public Void call() throws Exception {
-		
+
+		System.out.println("Adding cables to DataBase...");
 		CableBean cable;
 		PreparedStatement prepStatement = null;
 		Connection con = DataBaseManager.getConnectionAndCreate(); // Connect to the database
@@ -39,6 +40,7 @@ public class CableCSVDBWriter implements Callable<Void>{
 				prepStatement.executeBatch();
 				con.commit();
 				totalCount += batchCount;
+				System.out.println(totalCount/BATCH_SIZE);
 			}
 		}finally{
 			if(prepStatement != null)

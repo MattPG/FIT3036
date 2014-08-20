@@ -33,7 +33,6 @@ public class ParseCSVTask implements Runnable{
 
 	@Override
 	public void run() {
-		
 	        try {
 	        	
 	        	CableBean cable;

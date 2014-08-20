@@ -1,11 +1,11 @@
 ----------------------------------------------------------------
-Tue Aug 19 21:34:20 EST 2014:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance a816c00e-0147-ee0b-db4f-00000e8a5138 
-on database directory D:\Users\Matthew\git\FIT3036\CableGateProgram\DerbyDB with class loader sun.misc.Launcher$AppClassLoader@2d8ed284 
-Loaded from file:/C:/Users/Matthew/.m2/repository/org/apache/derby/derby/10.10.2.0/derby-10.10.2.0.jar
+Wed Aug 20 10:35:21 EST 2014:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance a816c00e-0147-f0d6-e725-00000e873ad0 
+on database directory \\ad.monash.edu\home\User009\mpgre4\Documents\Documents\Uni Work\FIT3036\git\CableGateProgram\DerbyDB with class loader sun.misc.Launcher$AppClassLoader@6921dcac 
+Loaded from file://ad.monash.edu/home/User009/mpgre4/.m2/repository/org/apache/derby/derby/10.10.2.0/derby-10.10.2.0.jar
 java.vendor=Oracle Corporation
-java.runtime.version=1.7.0_05-b06
-user.dir=D:\Users\Matthew\git\FIT3036\CableGateProgram
+java.runtime.version=1.7.0_51-b13
+user.dir=\\ad.monash.edu\home\User009\mpgre4\Documents\Documents\Uni Work\FIT3036\git\CableGateProgram
 os.name=Windows 7
 os.arch=amd64
 os.version=6.1
