@@ -17,10 +17,10 @@ public class DataBaseManager {
 														"DATE_TIME VARCHAR(16) NOT NULL," +
 														"CABLE_ID VARCHAR(50) NOT NULL,"+
 														"SENDER VARCHAR(100) NOT NULL,"+
-														"CLASSIFICATION VARCHAR(15) NOT NULL,"+
-														"REFERRALS VARCHAR(200),"+
-														"MAILING_LIST VARCHAR(1000) NOT NULL,"+
-														"CABLE_TEXT VARCHAR(10000) NOT NULL)";
+														"CLASSIFICATION VARCHAR(50) NOT NULL,"+
+														"REFERRALS CLOB,"+
+														"MAILING_LIST CLOB NOT NULL,"+
+														"CABLE_TEXT CLOB NOT NULL)";
 	
 	private static final String TABLE_COLUMNS =		"(CABLE_NUMBER," +
 													"DATE_TIME," +

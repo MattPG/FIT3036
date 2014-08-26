@@ -2,13 +2,14 @@ package cablegate.stream;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 
 public class CableCSVDBWriter implements Callable<Void>{
 	
 	private final BlockingQueue<CableBean> resultQueue;
-	private final int BATCH_SIZE = 1000;
+	private final int BATCH_SIZE = 500;
 	private final int MAX_CABLES = 251287;
 	
 	public CableCSVDBWriter(BlockingQueue<CableBean> resultQueue) {
@@ -40,8 +41,12 @@ public class CableCSVDBWriter implements Callable<Void>{
 				prepStatement.executeBatch();
 				con.commit();
 				totalCount += batchCount;
-				System.out.println(totalCount/BATCH_SIZE);
+				System.out.println("Batch " + totalCount/BATCH_SIZE + "/" + MAX_CABLES/BATCH_SIZE + " completed.");
 			}
+		} catch (SQLException e){
+			System.out.println("SQL EXCEPTION DB WRITER" );
+			e.printStackTrace();
+			System.exit(1);
 		}finally{
 			if(prepStatement != null)
 				prepStatement.close();

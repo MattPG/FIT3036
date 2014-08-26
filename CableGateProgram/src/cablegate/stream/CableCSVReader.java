@@ -14,86 +14,69 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import org.supercsv.cellprocessor.Optional;
+import org.supercsv.cellprocessor.ParseInt;
+import org.supercsv.cellprocessor.constraint.NotNull;
+import org.supercsv.cellprocessor.ift.CellProcessor;
+import org.supercsv.io.CsvBeanReader;
+import org.supercsv.io.ICsvBeanReader;
+import org.supercsv.prefs.CsvPreference;
 
 public class CableCSVReader implements Callable<Void>{
-
-	private static final int CABLE_CHUNK = 50;
-	private static final int STRING_BUILDER_INIT_SIZE = CABLE_CHUNK * 7000; // 7k chars ea. (avg is 6.3k)
+	
+	private static final int MAX_CABLES_LOADED = 1000;
 	
 	private static BufferedReader stream;
-	private final ThreadPoolExecutor threadPool;
 	private final ExecutorService dataBaseWriter;
 	private final BlockingQueue<CableBean> resultQueue;
+	private static ICsvBeanReader cableReader;
+	private static final CellProcessor[] processors = new CellProcessor[]	{   new ParseInt(), // cableNumber
+																		        new NotNull(), // dateTime
+																		        new NotNull(), // cableID
+																		        new NotNull(), // sender
+																		        new NotNull(), // classification
+																		        new Optional(), // references
+																		        new NotNull(), // mailingList
+																		        new NotNull(), // cableText
+																			};
 	
 	public CableCSVReader() {
 		this.dataBaseWriter = Executors.newSingleThreadExecutor();
-		this.threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(2*SystemConfig.getNumberOfCPUCores());
-		this.resultQueue = new ArrayBlockingQueue<CableBean>(500);
+		this.resultQueue = new ArrayBlockingQueue<CableBean>(MAX_CABLES_LOADED);
 	}
 
 	@Override
 	public Void call() {	
 		
+		// Create the database and a blank table
 		createDBandCableTable();
 		
-		// Temp variables for iterations
-		String currLine;
-		int cableCount;
-		// Stringbuilder for appending each line optimally
-		StringBuilder cables = null;
-		// A regex that detects the start of a new cable
-		Matcher matcher = Pattern.compile("\"[0-9]+\"").matcher("");   	
-		
-		// Open up the buffered stream to cable.csv
+		// Initialise the csvReader to cable.csv
 		getCableStream();
 		
 		//Spawn the datbaseWriter
 		Future<Void> dataBaseWriterFuture = dataBaseWriter.submit(new CableCSVDBWriter(resultQueue));
 		
-		try{
-			System.out.println("Reading CSV File...");
-			currLine = readLine();
-			while(currLine != null){		
-				cables = new StringBuilder(STRING_BUILDER_INIT_SIZE);
-		    	// Reset the cable counter
-		    	cableCount = 0;
-		    	while(currLine != null && cableCount < CABLE_CHUNK){
-					
-					// Append the line which is the start of the pattern
-					if(cableCount > 0)
-						cables.append('\n');
-					cables.append(currLine);
-		
-					// Add lines until we hit the next cable (or end of file)
-					currLine = readLine();
-					while(currLine != null && !matcher.reset(currLine).lookingAt()){
-						cables.append('\n');
-						cables.append(currLine);
-						currLine = readLine();	
-					}
-					
-					// Finished reading a full cable, increment the counter
-					cableCount++;
-				}
-		    	
-		    	// Send off this cable chunk to be parsed
-				threadPool.execute(new ParseCSVTask(cables, resultQueue));
+        try {    
+        	
+        	CableBean cable;
+            while( (cable = cableReader.read(CableBean.class, CableBean.getHeaderArray(), processors)) != null ) 
+            	resultQueue.put(cable);
+                
+        } catch (IOException | InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+       		// Make sure the streams are closed
+			try {
+        	   cableReader.close();
+        	   dataBaseWriter.shutdown();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			
-    	}finally{ 
-    		// Make sure the streams are closed
-    		if(stream != null)
-	    		try {
-					stream.close();
-					threadPool.shutdown();
-					dataBaseWriter.shutdown();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-    	}
+        }
 		
 		// Make sure the whole DB creation process is finished
 		try {
@@ -106,17 +89,6 @@ public class CableCSVReader implements Callable<Void>{
 		// Return to main
 		return null;
 	}
-		
-	private static String readLine(){
-		
-		try {
-			return stream.readLine();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}	
-		
-		return null;
-	}	
 	
 	private static void getCableStream(){
 		try {
@@ -124,6 +96,7 @@ public class CableCSVReader implements Callable<Void>{
 						new FileReader(
 							SystemConfig.getCableDirectory()
 							));
+			cableReader = new CsvBeanReader(new MyTokenizer(stream, CsvPreference.STANDARD_PREFERENCE), CsvPreference.STANDARD_PREFERENCE);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			System.exit(1);

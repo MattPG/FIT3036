@@ -11,12 +11,13 @@ import org.slf4j.profiler.Profiler;
 
 public class Main {
 	
-	
+	// TODO: discovered "UNCLASSIFIED//FOR OFFICIAL USE ONLY" in classification
+	// TODO: MAYBE USE SYSCS_UTIL.SYSCS_IMPORT_TABLE
 	public static void main(String[] args) {
 		File dataBase = new File(DataBaseManager.getDataBaseName());
 		
 		if(!dataBase.isDirectory()){
-			System.out.println("Creating Database...");
+			System.out.println("Database doesn't exist, creating Database...");
 	    	Profiler timer = new Profiler("Main.java");
 	    	timer.start("Adding ");
 	    	
