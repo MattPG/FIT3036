@@ -50,6 +50,7 @@ public class CableCSVReader implements Callable<Void>{
 	public Void call() {	
 		
 		// Create the database and a blank table
+		System.out.println("Instantiating DataBase...");
 		createDBandCableTable();
 		
 		// Initialise the csvReader to cable.csv
@@ -104,19 +105,22 @@ public class CableCSVReader implements Callable<Void>{
 	}
 	
 	private static void createDBandCableTable(){
-		System.out.println("Instantiating DataBase...");
-		Connection con = DataBaseManager.getConnectionAndCreate(); // Connect to the database
+		Connection con = DataBaseManager.getConnection(); // Connect to the database
+		Statement createTableStatement = null;
 		try{
 			
 			// Create Cable Table
-			Statement createTableStatement = con.createStatement();
-			createTableStatement.execute("CREATE TABLE " + DataBaseManager.getTableName() + DataBaseManager.getTableColumnsCreate());
+			createTableStatement = con.createStatement();
+			createTableStatement.execute("CREATE TABLE " + DataBaseManager.getTableName() + DataBaseManager.getTableSchemaCreate());
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
+			// close all open connections
 			try {
+				if(createTableStatement != null)
+					createTableStatement.close();
 				con.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block

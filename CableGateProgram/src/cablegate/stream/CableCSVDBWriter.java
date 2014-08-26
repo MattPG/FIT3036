@@ -9,7 +9,7 @@ import java.util.concurrent.Callable;
 public class CableCSVDBWriter implements Callable<Void>{
 	
 	private final BlockingQueue<CableBean> resultQueue;
-	private final int BATCH_SIZE = 500;
+	private final int BATCH_SIZE = 10000;
 	private final int MAX_CABLES = 251287;
 	
 	public CableCSVDBWriter(BlockingQueue<CableBean> resultQueue) {
@@ -22,15 +22,16 @@ public class CableCSVDBWriter implements Callable<Void>{
 		System.out.println("Adding cables to DataBase...");
 		CableBean cable;
 		PreparedStatement prepStatement = null;
-		Connection con = DataBaseManager.getConnectionAndCreate(); // Connect to the database
+		Connection con = DataBaseManager.getConnection(); // Connect to the database
 		int totalCount, batchCount;
 		try{
 			con.setAutoCommit(false); // Turn off auto-commits for batch-updates
 			
 			 prepStatement = con.prepareStatement(
-					"INSERT INTO " + DataBaseManager.getTableName() + DataBaseManager.getTableColumnsWithValues());
+					"INSERT INTO " + DataBaseManager.getTableName() + DataBaseManager.getTableSchemaWithValues());
 	    	
 			totalCount = 0;
+			System.out.println("Importing... 0%");
 			while(totalCount < MAX_CABLES){
 				batchCount = 0;
 				while(batchCount < BATCH_SIZE && batchCount + totalCount < MAX_CABLES){
@@ -41,18 +42,23 @@ public class CableCSVDBWriter implements Callable<Void>{
 				prepStatement.executeBatch();
 				con.commit();
 				totalCount += batchCount;
-				System.out.println("Batch " + totalCount/BATCH_SIZE + "/" + MAX_CABLES/BATCH_SIZE + " completed.");
+				System.out.println("Importing... " + (totalCount*100) / MAX_CABLES + "%");
 			}
 		} catch (SQLException e){
 			System.out.println("SQL EXCEPTION DB WRITER" );
 			e.printStackTrace();
 			System.exit(1);
 		}finally{
-			if(prepStatement != null)
-				prepStatement.close();
-			con.close();				
-		}	
-		
+			// close all open connections
+			try {
+				if(prepStatement != null)
+					prepStatement.close();
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return null;
 	}
 	

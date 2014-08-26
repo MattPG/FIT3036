@@ -13,7 +13,7 @@ public class DataBaseManager {
 	private static final String TABLE_NAME = "CABLES";
 
 	
-	private static final String TABLE_COLUMNS_CREATE =	"(CABLE_NUMBER INT PRIMARY KEY," +
+	private static final String TABLE_SCHEMA_CREATE =	"(CABLE_NUMBER INT PRIMARY KEY," +
 														"DATE_TIME VARCHAR(16) NOT NULL," +
 														"CABLE_ID VARCHAR(50) NOT NULL,"+
 														"SENDER VARCHAR(100) NOT NULL,"+
@@ -22,7 +22,7 @@ public class DataBaseManager {
 														"MAILING_LIST CLOB NOT NULL,"+
 														"CABLE_TEXT CLOB NOT NULL)";
 	
-	private static final String TABLE_COLUMNS =		"(CABLE_NUMBER," +
+	private static final String TABLE_SCHEMA =		"(CABLE_NUMBER," +
 													"DATE_TIME," +
 													"CABLE_ID,"+
 													"SENDER,"+
@@ -67,7 +67,7 @@ public class DataBaseManager {
 		return TABLE_NAME;
 	}
 	
-	public static Connection getConnectionAndCreate() {
+	public static Connection getConnection() {
 		
 		try {
 			return DriverManager.getConnection(getDataBaseProtocol() + getDataBaseName() + ";create=true");
@@ -79,15 +79,15 @@ public class DataBaseManager {
 		return null;
 	}
 
-	public static String getTableColumnsCreate() {
-		return TABLE_COLUMNS_CREATE;
+	public static String getTableSchemaCreate() {
+		return TABLE_SCHEMA_CREATE;
 	}
 
-	public static String getTableColumns() {
-		return TABLE_COLUMNS;
+	public static String getTableSchema() {
+		return TABLE_SCHEMA;
 	}
 	
-	public static String getTableColumnsWithValues() {
-		return TABLE_COLUMNS + " VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+	public static String getTableSchemaWithValues() {
+		return TABLE_SCHEMA  + " VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 	}
 }
