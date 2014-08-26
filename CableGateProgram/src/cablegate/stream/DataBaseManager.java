@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class DataBaseManager {
 
@@ -89,5 +90,15 @@ public class DataBaseManager {
 	
 	public static String getTableSchemaWithValues() {
 		return TABLE_SCHEMA  + " VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+	}
+	
+	public static void createTable(Statement stmt, String tableName, String tableSchema){
+		try {
+			stmt.execute("CREATE TABLE " + tableName + tableSchema);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }

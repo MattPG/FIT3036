@@ -97,7 +97,13 @@ public class CableCSVReader implements Callable<Void>{
 						new FileReader(
 							SystemConfig.getCableDirectory()
 							));
-			cableReader = new CsvBeanReader(new MyTokenizer(stream, CsvPreference.STANDARD_PREFERENCE), CsvPreference.STANDARD_PREFERENCE);
+			
+			cableReader = new CsvBeanReader(new MyTokenizer(stream,
+															CsvPreference.STANDARD_PREFERENCE
+															),
+											CsvPreference.STANDARD_PREFERENCE
+											);
+			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			System.exit(1);
@@ -111,7 +117,11 @@ public class CableCSVReader implements Callable<Void>{
 			
 			// Create Cable Table
 			createTableStatement = con.createStatement();
-			createTableStatement.execute("CREATE TABLE " + DataBaseManager.getTableName() + DataBaseManager.getTableSchemaCreate());
+			DataBaseManager.createTable(createTableStatement,
+										DataBaseManager.getTableName(),
+										DataBaseManager.getTableSchemaCreate()
+										);
+
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
