@@ -1,4 +1,4 @@
-package cablegate.stream;
+package cablegate.infrastructure;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

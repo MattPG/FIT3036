@@ -1,4 +1,4 @@
-package cablegate.stream;
+package cablegate.infrastructure;
 
 
 public class CableBean {

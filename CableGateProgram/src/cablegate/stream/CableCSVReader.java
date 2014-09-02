@@ -23,6 +23,11 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
+import cablegate.infrastructure.CableBean;
+import cablegate.infrastructure.DataBaseManager;
+import cablegate.infrastructure.MyTokenizer;
+import cablegate.infrastructure.SystemConfig;
+
 public class CableCSVReader implements Callable<Void>{
 	
 	private static final int MAX_CABLES_LOADED = 1000;
