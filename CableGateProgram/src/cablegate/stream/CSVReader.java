@@ -23,9 +23,7 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
-import cablegate.infrastructure.CableBean;
 import cablegate.infrastructure.DataBaseManager;
-import cablegate.infrastructure.CSVTokenizer;
 import cablegate.infrastructure.SystemConfig;
 
 public class CSVReader implements Callable<Void>{

@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 
-import cablegate.infrastructure.CableBean;
 import cablegate.infrastructure.DataBaseManager;
 
 public class DBWriter implements Callable<Void>{

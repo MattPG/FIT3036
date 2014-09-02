@@ -5,6 +5,14 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+import cablegate.stream.CSVReader;
+import cablegate.stream.CableBean;
 
 public class DataBaseManager {
 
@@ -107,5 +115,20 @@ public class DataBaseManager {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public static void instantiateDatabase(){
+		// Create the thread to handle cable.csv reading
+    	CompletionService<Void> singleThread = new ExecutorCompletionService<Void>(Executors.newSingleThreadExecutor());
+		// Run the cable.csv reading thread
+    	Future<Void> allCablesRead = singleThread.submit(new CSVReader());
+    	
+    	// Wait until everything is imported
+    	try {
+    		allCablesRead.get();
+		} catch (InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

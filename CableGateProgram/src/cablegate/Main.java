@@ -1,11 +1,6 @@
 package cablegate;
 
 import java.io.File;
-import java.util.concurrent.CompletionService;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorCompletionService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -13,11 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.LabelBuilder;
 import javafx.stage.Stage;
-
-import org.slf4j.profiler.Profiler;
-
 import cablegate.infrastructure.DataBaseManager;
-import cablegate.stream.CSVReader;
 
 @SuppressWarnings("deprecation")
 public class Main extends Application{ 
@@ -38,7 +29,7 @@ public class Main extends Application{
 		
 		if(!dataBase.isDirectory()){
 			System.out.println("Database doesn't exist, creating Database...");
-			createAndImportDataBase();
+			DataBaseManager.instantiateDatabase();
 		}
 		
 		//System.exit(0);
@@ -47,23 +38,4 @@ public class Main extends Application{
 	 public static void main(String[] args) {  
 		 Application.launch(args);  
 	 }  
-	
-	private static void createAndImportDataBase(){
-    	Profiler timer = new Profiler("Main.java");
-    	timer.start("Adding ");
-    	
-		// Create the thread to handle cable.csv reading
-    	CompletionService<Void> singleThread = new ExecutorCompletionService<Void>(Executors.newSingleThreadExecutor());
-		// Run the cable.csv reading thread
-    	Future<Void> allCablesRead = singleThread.submit(new CSVReader());
-    	
-    	try {
-    		allCablesRead.get();
-		} catch (InterruptedException | ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	
-    	timer.stop().print();
-	}
 }
