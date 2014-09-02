@@ -35,6 +35,9 @@ public class DataBaseManager {
 	public DataBaseManager(){
 	}
 	
+	/*
+	 * 
+	 */
 	public static void addBatch(PreparedStatement pstmt, CableBean cable){
 		try {
 			pstmt.setInt(1, cable.getCableNumber());
@@ -88,8 +91,12 @@ public class DataBaseManager {
 		return TABLE_SCHEMA;
 	}
 	
-	public static String getTableSchemaWithValues() {
+	public static String getTableSchemaWithQueryValues() {
 		return TABLE_SCHEMA  + " VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+	}
+	
+	public static void searchTable(){
+		
 	}
 	
 	public static void createTable(Statement stmt, String tableName, String tableSchema){

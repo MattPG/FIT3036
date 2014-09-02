@@ -31,7 +31,7 @@ import org.supercsv.prefs.CsvPreference;
  * @author Kasper B. Graversen
  * @author James Bassett
  */
-public class MyTokenizer extends AbstractTokenizer {
+public class CSVTokenizer extends AbstractTokenizer {
 	
 	private static final char NEWLINE = '\n';
 	
@@ -67,7 +67,7 @@ public class MyTokenizer extends AbstractTokenizer {
 	 * @throws NullPointerException
 	 *             if reader or preferences is null
 	 */
-	public MyTokenizer(final Reader reader, final CsvPreference preferences) {
+	public CSVTokenizer(final Reader reader, final CsvPreference preferences) {
 		super(reader, preferences);
 		this.quoteChar = preferences.getQuoteChar();
 		this.delimeterChar = preferences.getDelimiterChar();

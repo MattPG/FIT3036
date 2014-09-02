@@ -25,10 +25,10 @@ import org.supercsv.prefs.CsvPreference;
 
 import cablegate.infrastructure.CableBean;
 import cablegate.infrastructure.DataBaseManager;
-import cablegate.infrastructure.MyTokenizer;
+import cablegate.infrastructure.CSVTokenizer;
 import cablegate.infrastructure.SystemConfig;
 
-public class CableCSVReader implements Callable<Void>{
+public class CSVReader implements Callable<Void>{
 	
 	private static final int MAX_CABLES_LOADED = 1000;
 	
@@ -46,7 +46,7 @@ public class CableCSVReader implements Callable<Void>{
 																		        new NotNull(), // cableText
 																			};
 	
-	public CableCSVReader() {
+	public CSVReader() {
 		this.dataBaseWriter = Executors.newSingleThreadExecutor();
 		this.resultQueue = new ArrayBlockingQueue<CableBean>(MAX_CABLES_LOADED);
 	}
@@ -62,7 +62,7 @@ public class CableCSVReader implements Callable<Void>{
 		getCableStream();
 		
 		//Spawn the datbaseWriter
-		Future<Void> dataBaseWriterFuture = dataBaseWriter.submit(new CableCSVDBWriter(resultQueue));
+		Future<Void> dataBaseWriterFuture = dataBaseWriter.submit(new DBWriter(resultQueue));
 		
         try {    
         	
@@ -103,7 +103,7 @@ public class CableCSVReader implements Callable<Void>{
 							SystemConfig.getCableDirectory()
 							));
 			
-			cableReader = new CsvBeanReader(new MyTokenizer(stream,
+			cableReader = new CsvBeanReader(new CSVTokenizer(stream,
 															CsvPreference.STANDARD_PREFERENCE
 															),
 											CsvPreference.STANDARD_PREFERENCE

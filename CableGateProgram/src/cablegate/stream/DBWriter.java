@@ -9,13 +9,13 @@ import java.util.concurrent.Callable;
 import cablegate.infrastructure.CableBean;
 import cablegate.infrastructure.DataBaseManager;
 
-public class CableCSVDBWriter implements Callable<Void>{
+public class DBWriter implements Callable<Void>{
 	
 	private final BlockingQueue<CableBean> resultQueue;
 	private final int BATCH_SIZE = 10000;
 	private final int MAX_CABLES = 251287;
 	
-	public CableCSVDBWriter(BlockingQueue<CableBean> resultQueue) {
+	public DBWriter(BlockingQueue<CableBean> resultQueue) {
 		this.resultQueue = resultQueue;
 	}
 
@@ -31,7 +31,7 @@ public class CableCSVDBWriter implements Callable<Void>{
 			con.setAutoCommit(false); // Turn off auto-commits for batch-updates
 			
 			 prepStatement = con.prepareStatement(
-					"INSERT INTO " + DataBaseManager.getTableName() + DataBaseManager.getTableSchemaWithValues());
+					"INSERT INTO " + DataBaseManager.getTableName() + DataBaseManager.getTableSchemaWithQueryValues());
 	    	
 			totalCount = 0;
 			System.out.println("Importing... 0%");

@@ -16,8 +16,8 @@ import javafx.stage.Stage;
 
 import org.slf4j.profiler.Profiler;
 
-import cablegate.stream.CableCSVReader;
-import cablegate.stream.DataBaseManager;
+import cablegate.infrastructure.DataBaseManager;
+import cablegate.stream.CSVReader;
 
 @SuppressWarnings("deprecation")
 public class Main extends Application{ 
@@ -55,7 +55,7 @@ public class Main extends Application{
 		// Create the thread to handle cable.csv reading
     	CompletionService<Void> singleThread = new ExecutorCompletionService<Void>(Executors.newSingleThreadExecutor());
 		// Run the cable.csv reading thread
-    	Future<Void> allCablesRead = singleThread.submit(new CableCSVReader());
+    	Future<Void> allCablesRead = singleThread.submit(new CSVReader());
     	
     	try {
     		allCablesRead.get();
