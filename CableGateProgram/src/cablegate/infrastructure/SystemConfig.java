@@ -9,14 +9,24 @@ public class SystemConfig {
 	private static final String CABLES_DIRECTORY_HOME = "D:\\Users\\Matthew\\Documents\\";
 	private static final String CABLES_FILE_NAME = "cables.csv";
 	private static final int NUMBER_OF_CPU_CORES = Runtime.getRuntime().availableProcessors();
+	private static final int SCREEN_WIDTH = 0;
+	private static final int SCREEN_HEIGHT = 0;
 	
 	public SystemConfig(){	
 	}
 	
-	public static int getNumberOfCPUCores(){
+	public static int getNumberOfCpuCores() {
 		return NUMBER_OF_CPU_CORES;
 	}
-	
+
+	public static int getScreenWidth() {
+		return SCREEN_WIDTH;
+	}
+
+	public static int getScreenHeight() {
+		return SCREEN_HEIGHT;
+	}
+
 	public static String getCurrentUser(){
 		return CURRENT_USER;
 	}
