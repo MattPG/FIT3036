@@ -12,7 +12,6 @@ import cablegate.infrastructure.DataBaseManager;
 
 @SuppressWarnings("deprecation")
 public class Main extends Application{ 
-	// TODO: discovered "UNCLASSIFIED//FOR OFFICIAL USE ONLY" in classification column of a cable
 
 	 @Override  
 	 public void start(Stage stage) throws Exception {  

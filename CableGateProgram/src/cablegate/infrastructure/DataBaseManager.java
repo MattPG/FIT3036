@@ -22,18 +22,18 @@ public class DataBaseManager {
 	private static final String TABLE_NAME = "CABLES";
 
 	
-	private static final String TABLE_SCHEMA_CREATE =	"(CABLE_NUMBER INT PRIMARY KEY," +
+	private static final String TABLE_SCHEMA_CREATE =	"(CABLE_ID INT PRIMARY KEY," +
 														"DATE_TIME VARCHAR(16) NOT NULL," +
-														"CABLE_ID VARCHAR(50) NOT NULL,"+
+														"CABLE_NUMBER VARCHAR(50) NOT NULL,"+
 														"SENDER VARCHAR(100) NOT NULL,"+
 														"CLASSIFICATION VARCHAR(50) NOT NULL,"+
 														"REFERRALS CLOB,"+
 														"MAILING_LIST CLOB NOT NULL,"+
 														"CABLE_TEXT CLOB NOT NULL)";
 	
-	private static final String TABLE_SCHEMA =		"(CABLE_NUMBER," +
+	private static final String TABLE_SCHEMA =		"(CABLE_ID," +
 													"DATE_TIME," +
-													"CABLE_ID,"+
+													"CABLE_NUMBER,"+
 													"SENDER,"+
 													"CLASSIFICATION,"+
 													"REFERRALS,"+
@@ -48,9 +48,9 @@ public class DataBaseManager {
 	 */
 	public static void addBatch(PreparedStatement pstmt, CableBean cable){
 		try {
-			pstmt.setInt(1, cable.getCableNumber());
+			pstmt.setInt(1, cable.getCableID());
 			pstmt.setString(2, cable.getDateTime());
-			pstmt.setString(3, cable.getCableID());
+			pstmt.setString(3, cable.getCableNumber());
 			pstmt.setString(4, cable.getSender());
 			pstmt.setString(5, cable.getClassification());
 			pstmt.setString(6, cable.getReferrals());

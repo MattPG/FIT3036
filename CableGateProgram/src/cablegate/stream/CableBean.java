@@ -2,9 +2,9 @@ package cablegate.stream;
 
 
 public class CableBean {
-	private static final String[] HEADER_ARRAY ={	"cableNumber",
+	private static final String[] HEADER_ARRAY ={	"cableID",
 													"dateTime", 
-													"cableID",
+													"cableNumber",
 													"sender",
 													"classification",
 													"referrals",
@@ -12,11 +12,11 @@ public class CableBean {
 													"cableText" 
 												};
 
-	private int cableNumber;
+	private int cableID;
 	
 	private String dateTime;
 	
-	private String cableID;
+	private String cableNumber;
 	
 	private String sender;
 	
@@ -28,16 +28,16 @@ public class CableBean {
 	
 	private String cableText;
 
-	public int getCableNumber() {
-		return cableNumber;
+	public int getCableID() {
+		return cableID;
 	}
 	
 	public String getDateTime() {
 		return dateTime;
 	}
 
-	public String getCableID() {
-		return cableID;
+	public String getCableNumber() {
+		return cableNumber;
 	}
 
 	public String getSender() {
@@ -60,16 +60,16 @@ public class CableBean {
 		return cableText;
 	}
 
-	public void setCableNumber(int cableNumber) {
-		this.cableNumber = cableNumber;
+	public void setCableID(int cableID) {
+		this.cableID = cableID;
 	}
 
 	public void setDateTime(String dateTime) {
 		this.dateTime = dateTime;
 	}
 
-	public void setCableID(String cableID) {
-		this.cableID = cableID;
+	public void setCableNumber(String cableNumber) {
+		this.cableNumber = cableNumber;
 	}
 
 	public void setSender(String sender) {
@@ -98,9 +98,9 @@ public class CableBean {
 
 	@Override
 	public String toString(){
-		return getCableNumber() + ","
+		return getCableID() + ","
 				+ getDateTime() + ","
-				+ getCableID() + ","
+				+ getCableNumber() + ","
 				+ getSender() + ","
 				+ getClassification() + ","
 				+ getReferrals() + ","
