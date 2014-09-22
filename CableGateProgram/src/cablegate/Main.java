@@ -3,35 +3,36 @@ package cablegate;
 import java.io.File;
 
 import javafx.application.Application;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.LabelBuilder;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+
+import org.datafx.controller.flow.Flow;
+import org.datafx.controller.flow.FlowHandler;
+import org.datafx.controller.flow.container.DefaultFlowContainer;
+
+import cablegate.gui.control.Root;
 import cablegate.infrastructure.DataBaseManager;
 
-@SuppressWarnings("deprecation")
 public class Main extends Application{ 
-
+	
 	 @Override  
-	 public void start(Stage stage) throws Exception {  
-	    
-		 Label label = LabelBuilder.create()  
-		                    .text("Maven + JavaFX = true")  
-		                    .alignment(Pos.CENTER).build();  
-		    
-		 Scene scene = new Scene(label, 200, 100);  
-		 stage.setScene(scene);  
-		 stage.show();  
+	 public void start(Stage primaryStage) throws Exception {  
+
+        Flow flow  = new Flow(Root.class);
+ 
+        FlowHandler flowHandler = flow.createHandler();
+ 
+        StackPane pane = flowHandler.start(new DefaultFlowContainer());
+        
+        primaryStage.setScene(new Scene(pane));
+        primaryStage.show();
 	  
 		File dataBase = new File(DataBaseManager.getDataBaseName());
-		
 		if(!dataBase.isDirectory()){
 			System.out.println("Database doesn't exist, creating Database...");
 			DataBaseManager.instantiateDatabase();
 		}
-		
-		//System.exit(0);
 	 }  
 	   
 	 public static void main(String[] args) {  
