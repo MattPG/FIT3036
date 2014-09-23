@@ -6,10 +6,15 @@ import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cablegate.Main;
 import cablegate.infrastructure.DataBaseManager;
 
 public class DBWriter implements Callable<Void>{
-	
+
+	private static final Logger log = LoggerFactory.getLogger(DBWriter.class);
 	private final BlockingQueue<CableBean> resultQueue;
 	private final int BATCH_SIZE = 10000;
 	private final int MAX_CABLES = 251287;
@@ -21,7 +26,7 @@ public class DBWriter implements Callable<Void>{
 	@Override
 	public Void call() throws Exception {
 
-		System.out.println("Adding cables to DataBase...");
+		log.debug("Adding cables to DataBase...");
 		CableBean cable;
 		PreparedStatement prepStatement = null;
 		Connection con = DataBaseManager.getConnection(); // Connect to the database
@@ -33,7 +38,7 @@ public class DBWriter implements Callable<Void>{
 					"INSERT INTO " + DataBaseManager.getTableName() + DataBaseManager.getTableSchemaWithQueryValues());
 	    	
 			totalCount = 0;
-			System.out.println("Importing... 0%");
+			log.debug("Importing... 0%");
 			while(totalCount < MAX_CABLES){
 				batchCount = 0;
 				while(batchCount < BATCH_SIZE && batchCount + totalCount < MAX_CABLES){
@@ -44,10 +49,10 @@ public class DBWriter implements Callable<Void>{
 				prepStatement.executeBatch();
 				con.commit();
 				totalCount += batchCount;
-				System.out.println("Importing... " + (totalCount*100) / MAX_CABLES + "%");
+				log.debug("Importing... " + (totalCount*100) / MAX_CABLES + "%");
 			}
 		} catch (SQLException e){
-			System.out.println("SQL EXCEPTION DB WRITER" );
+			log.debug("SQL EXCEPTION DB WRITER" );
 			e.printStackTrace();
 			System.exit(1);
 		}finally{

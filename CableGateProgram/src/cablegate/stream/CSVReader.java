@@ -15,6 +15,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ParseInt;
 import org.supercsv.cellprocessor.constraint.NotNull;
@@ -23,11 +25,13 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
+import cablegate.Main;
 import cablegate.infrastructure.DataBaseManager;
 import cablegate.infrastructure.SystemConfig;
 
 public class CSVReader implements Callable<Void>{
-	
+
+	private static final Logger log = LoggerFactory.getLogger(CSVReader.class);
 	private static final int MAX_CABLES_LOADED = 1000;
 	
 	private static BufferedReader stream;
@@ -53,7 +57,7 @@ public class CSVReader implements Callable<Void>{
 	public Void call() {	
 		
 		// Create the database and a blank table
-		System.out.println("Instantiating DataBase...");
+		log.debug("Instantiating DataBase...");
 		createDBandCableTable();
 		
 		// Initialise the csvReader to cable.csv
