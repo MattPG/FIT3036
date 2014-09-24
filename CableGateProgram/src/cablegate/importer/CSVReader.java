@@ -1,4 +1,4 @@
-package cablegate.stream;
+package cablegate.importer;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -58,7 +58,7 @@ public class CSVReader implements Callable<Void>{
 		
 		// Create the database and a blank table
 		log.debug("Instantiating DataBase...");
-		createDBandCableTable();
+		CSVReader.createDBandCableTable();
 		
 		// Initialise the csvReader to cable.csv
 		getCableStream();

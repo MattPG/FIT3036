@@ -1,4 +1,4 @@
-package cablegate.stream;
+package cablegate.importer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

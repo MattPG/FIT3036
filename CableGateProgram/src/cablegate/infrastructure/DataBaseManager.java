@@ -11,8 +11,8 @@ import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import cablegate.stream.CSVReader;
-import cablegate.stream.CableBean;
+import cablegate.importer.CSVReader;
+import cablegate.importer.CableBean;
 
 public class DataBaseManager {
 
@@ -58,7 +58,6 @@ public class DataBaseManager {
 			pstmt.setString(8, cable.getCableText());
 			pstmt.addBatch();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -84,7 +83,6 @@ public class DataBaseManager {
 		try {
 			return DriverManager.getConnection(getDataBaseProtocol() + getDataBaseName() + ";create=true");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -111,24 +109,19 @@ public class DataBaseManager {
 		try {
 			stmt.execute("CREATE TABLE " + tableName + tableSchema);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 	}
 	
-	public static void instantiateDatabase(){
+	public static Future<Void> instantiateDatabase(){
+		
 		// Create the thread to handle cable.csv reading
     	CompletionService<Void> singleThread = new ExecutorCompletionService<Void>(Executors.newSingleThreadExecutor());
-		// Run the cable.csv reading thread
+		
+    	// Run the cable.csv reading thread
     	Future<Void> allCablesRead = singleThread.submit(new CSVReader());
     	
-    	// Wait until everything is imported
-    	try {
-    		allCablesRead.get();
-		} catch (InterruptedException | ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}     	
+    	return allCablesRead;  	
 	}
 }
