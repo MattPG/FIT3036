@@ -25,7 +25,6 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
-import cablegate.Main;
 import cablegate.infrastructure.DataBaseManager;
 import cablegate.infrastructure.SystemConfig;
 
@@ -102,7 +101,7 @@ public class CSVReader implements Callable<Void>{
 		try {
 			stream = new BufferedReader(
 						new FileReader(
-							SystemConfig.getCableDirectory()
+							SystemConfig.getArchiveDirectory()
 							));
 			
 			cableReader = new CsvBeanReader(new CSVTokenizer(stream,

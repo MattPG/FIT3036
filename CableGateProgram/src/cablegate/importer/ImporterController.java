@@ -11,20 +11,17 @@ import javafx.scene.control.TextField;
 
 import javax.annotation.PostConstruct;
 
-import org.datafx.concurrent.ProcessChain;
 import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.ActionMethod;
 import org.datafx.controller.flow.action.ActionTrigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cablegate.infrastructure.DataBaseManager;
 import cablegate.infrastructure.SystemConfig;
 
-@FXMLController(value="inputDir.fxml", title = "Import")
-public class inputDir {
-	
-	private static Logger log = LoggerFactory.getLogger(inputDir.class);
+@FXMLController(value="Importer.fxml")
+public class ImporterController {
+	private static Logger log = LoggerFactory.getLogger(ImporterController.class);
 	
 	@FXML
 	Label outlineLabel;
@@ -44,11 +41,12 @@ public class inputDir {
 
 	@ActionMethod("importDB")
     public void onImportDB() {
-		log.debug("Setting cable directory path to {} and creating database",directoryProperty.get());
-		SystemConfig.setDataBaseDirectory(directoryProperty.get());
-		importButton.setDisable(true);
-//		importingDB = DataBaseManager.instantiateDatabase();
-		
+		if(!SystemConfig.databaseExists()){
+			log.debug("Setting cable directory path to {} and creating database",directoryProperty.get());
+			SystemConfig.setArchiveDirectory(directoryProperty.get());
+			importButton.setDisable(true);
+	//TODO:	importingDB = DataBaseManager.instantiateDatabase();
+		}
     }
 	
     @PostConstruct
