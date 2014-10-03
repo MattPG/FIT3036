@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.datafx.controller.flow.Flow;
 import org.datafx.controller.flow.FlowHandler;
 import org.slf4j.Logger;
@@ -30,7 +31,13 @@ public class Main extends Application{
 			  JoranConfigurator configurator = new JoranConfigurator();
 			  configurator.setContext(context);
 			  
-			  String systemLogFilePath = System.getProperty("user.dir") + "\\src\\cablegate\\infrastructure\\logback.xml";
+			  String systemLogFilePath = null;
+			  
+			  if(SystemUtils.IS_OS_WINDOWS){
+				  systemLogFilePath = System.getProperty("user.dir") + "\\src\\cablegate\\infrastructure\\logback.xml";
+			  }else {
+				  systemLogFilePath = System.getProperty("user.dir") + "/src/cablegate/infrastructure/logback.xml";
+			  }
 			  configurator.doConfigure(systemLogFilePath); // loads logback file
 			} catch (JoranException je) {
 			  // StatusPrinter will handle this

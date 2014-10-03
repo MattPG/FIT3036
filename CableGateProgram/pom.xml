@@ -68,6 +68,10 @@
 	   <artifactId>hibernate-core</artifactId>
 	   <version>4.3.6.Final</version>
 	</dependency>
+	
+	 <groupId>org.apache.commons</groupId>
+ 		 <artifactId>commons-lang3</artifactId>
+ 	 <version>3.3.2</version>
 
   </dependencies>
 </project>

@@ -10,6 +10,7 @@ import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -49,8 +50,14 @@ public class DataBaseManager {
 	public static void configureHibernateSession(){
 		Configuration configuration = new Configuration();
 		configuration.configure("cablegate/infrastructure/hibernate.cfg.xml");
+
+		String systemDatabaseLocation = null;
+		if(SystemUtils.IS_OS_WINDOWS){
+			systemDatabaseLocation= DATABASE_PROTOCOL + System.getProperty("user.dir") + '\\' + DATABASE_NAME;
+		}else {
+			systemDatabaseLocation= DATABASE_PROTOCOL + System.getProperty("user.dir") + '/' + DATABASE_NAME;
+		}
 		
-		String systemDatabaseLocation = DATABASE_PROTOCOL + System.getProperty("user.dir") + '\\' + DATABASE_NAME;
 		configuration.setProperty("hibernate.connection.url", systemDatabaseLocation);
 		
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();        

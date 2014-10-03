@@ -7,12 +7,12 @@
 <hibernate-mapping package="cablegate.models">
 	<class table="CABLES" name="Cable">
 		<id name="cableID" column="CABLE_ID"/>	
-	<property name="dateTime" column="DATE_TIME"/>
-	<property name="cableNumber" column="CABLE_NUMBER"/>
-	<property name="sender" column="SENDER"/>
-	<property name="classification" column="CLASSIFICATION"/>
-	<property name="referrals" column="REFERRALS"/>
-	<property name="mailingList" column="MAILING_LIST"/>
-	<property name="cableText" column="CABLE_TEXT"/>
+		<property name="dateTime" column="DATE_TIME"/>
+		<property name="cableNumber" column="CABLE_NUMBER"/>
+		<property name="sender" column="SENDER"/>
+		<property name="classification" column="CLASSIFICATION"/>
+		<property name="referrals" column="REFERRALS"/>
+		<property name="mailingList" column="MAILING_LIST"/>
+		<property name="cableText" column="CABLE_TEXT"/>
 	</class>
 </hibernate-mapping>
