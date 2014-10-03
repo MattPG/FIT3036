@@ -2,11 +2,10 @@ package cablegate;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
 
 import javax.annotation.PostConstruct;
 
@@ -25,9 +24,6 @@ public class RootController {
 	private BorderPane parentPane;
 	
 	@FXML
-	private TabPane tabPane;
-	
-	@FXML
 	private MenuBar menuBar;
 	
 	@FXML
@@ -42,27 +38,24 @@ public class RootController {
 	@ActionTrigger("BrowseDatabase")
 	private MenuItem browseItem;
 	
-	private FlowHandler tabFlowHandler;
-	private StackPane tabFlowPane;
-	
+	private FlowHandler browserFlowHandler;	
+	private Node browserFlowView;
 	private FlowHandler importFlowHandler;
-	private StackPane importFlowPane;
+	private Node importFlowView;
 	
 	@PostConstruct
 	public void init() throws FlowException {
 		browseItem.setDisable(true);
 		
 		Flow tabFlow = new Flow(BrowserController.class);
-		tabFlowHandler = tabFlow.createHandler();
-		tabFlowPane = tabFlowHandler.start();
+		browserFlowHandler = tabFlow.createHandler();
+		browserFlowView = browserFlowHandler.start();		
 		
 		Flow importFlow = new Flow(ImporterController.class);
 		importFlowHandler = importFlow.createHandler();
-		importFlowPane = importFlowHandler.start();
+		importFlowView = importFlowHandler.start();
 
-		parentPane.setCenter(tabFlowPane);
-		
-		// TODO: Check if database exists and set parameters in SystemConfig
+		parentPane.setCenter(browserFlowView);
 	}
 	
 	@ActionMethod("ExitProgram")
@@ -74,14 +67,14 @@ public class RootController {
 	public void onImportDatabase() throws FlowException{
 		importItem.setDisable(true);
 		browseItem.setDisable(false);
-		parentPane.setCenter(importFlowPane);
+		parentPane.setCenter(importFlowView);
 	}
 	
 	@ActionMethod("BrowseDatabase")
 	public void onBrowseDatabase(){
 		importItem.setDisable(false);
 		browseItem.setDisable(true);
-		parentPane.setCenter(tabFlowPane);
+		parentPane.setCenter(browserFlowView);
 	}
 	
 }

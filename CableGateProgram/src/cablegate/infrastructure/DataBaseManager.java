@@ -10,8 +10,14 @@ import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
+
 import cablegate.importer.CSVReader;
-import cablegate.importer.CableBean;
+import cablegate.models.Cable;
 
 public class DataBaseManager {
 
@@ -19,7 +25,8 @@ public class DataBaseManager {
 	private static final String DATABASE_NAME = "DerbyDB";
 	private static final String DATABASE_PROTOCOL = "jdbc:derby:";
 	private static final String TABLE_NAME = "CABLES";
-
+	
+	private static SessionFactory sessionFactory;
 	
 	private static final String TABLE_SCHEMA_CREATE =	"(CABLE_ID INT PRIMARY KEY," +
 														"DATE_TIME VARCHAR(16) NOT NULL," +
@@ -38,14 +45,27 @@ public class DataBaseManager {
 													"REFERRALS,"+
 													"MAILING_LIST,"+
 													"CABLE_TEXT)";
-	
-	public DataBaseManager(){
+		
+	public static void configureHibernateSession(){
+		Configuration configuration = new Configuration();
+		configuration.configure("cablegate/infrastructure/hibernate.cfg.xml");
+		
+		String systemDatabaseLocation = DATABASE_PROTOCOL + System.getProperty("user.dir") + '\\' + DATABASE_NAME;
+		configuration.setProperty("hibernate.connection.url", systemDatabaseLocation);
+		
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();        
+		sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 	}
 	
-	/*
-	 * 
-	 */
-	public static void addBatch(PreparedStatement pstmt, CableBean cable){
+	public static Session openSession(){
+		return sessionFactory.openSession();
+	}
+	
+	public static void closeHibernateSession(){
+		sessionFactory.close();
+	}
+	
+	public static void addBatch(PreparedStatement pstmt, Cable cable){
 		try {
 			pstmt.setInt(1, cable.getCableID());
 			pstmt.setString(2, cable.getDateTime());
@@ -61,15 +81,15 @@ public class DataBaseManager {
 		}
 	}
 	
-	public static String getDataBaseProtocol(){
+	public static String getDatabaseProtocol(){
 		return DATABASE_PROTOCOL;
 	}
 	
-	public static String getDataBaseName(){
+	public static String getDatabaseName(){
 		return DATABASE_NAME;
 	}
 	
-	public static String getDataBaseDriver(){
+	public static String getDatabaseDriver(){
 		return DATABASE_DRIVER;
 	}
 	
@@ -78,16 +98,21 @@ public class DataBaseManager {
 	}
 	
 	public static Connection getConnection() {
+		Connection conn = null;
 		
 		try {
-			return DriverManager.getConnection(getDataBaseProtocol() + getDataBaseName() + ";create=true");
+			conn = DriverManager.getConnection(getDatabaseURL());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-		return null;
+		return conn;
 	}
-
+	
+	public static String getDatabaseURL(){
+		return getDatabaseProtocol() + getDatabaseName() + ";create=true";
+	}
+	
 	public static String getTableSchemaCreate() {
 		return TABLE_SCHEMA_CREATE;
 	}

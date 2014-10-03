@@ -10,23 +10,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cablegate.infrastructure.DataBaseManager;
+import cablegate.models.Cable;
 
 public class DBWriter implements Callable<Void>{
-
 	private static final Logger log = LoggerFactory.getLogger(DBWriter.class);
-	private final BlockingQueue<CableBean> resultQueue;
+	private final BlockingQueue<Cable> resultQueue;
 	private final int BATCH_SIZE = 10000;
 	private final int MAX_CABLES = 251287;
 	
-	public DBWriter(BlockingQueue<CableBean> resultQueue) {
+	public DBWriter(BlockingQueue<Cable> resultQueue) {
 		this.resultQueue = resultQueue;
 	}
 
 	@Override
 	public Void call() throws Exception {
-
 		log.debug("Adding cables to DataBase...");
-		CableBean cable;
+		Cable cable;
 		PreparedStatement prepStatement = null;
 		Connection con = DataBaseManager.getConnection(); // Connect to the database
 		int totalCount, batchCount;
@@ -67,6 +66,4 @@ public class DBWriter implements Callable<Void>{
 		}
 		return null;
 	}
-	
-
 }

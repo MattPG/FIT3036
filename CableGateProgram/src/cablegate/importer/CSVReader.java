@@ -27,6 +27,7 @@ import org.supercsv.prefs.CsvPreference;
 
 import cablegate.infrastructure.DataBaseManager;
 import cablegate.infrastructure.SystemConfig;
+import cablegate.models.Cable;
 
 public class CSVReader implements Callable<Void>{
 
@@ -35,7 +36,7 @@ public class CSVReader implements Callable<Void>{
 	
 	private static BufferedReader stream;
 	private final ExecutorService dataBaseWriter;
-	private final BlockingQueue<CableBean> resultQueue;
+	private final BlockingQueue<Cable> resultQueue;
 	private static ICsvBeanReader cableReader;
 	private static final CellProcessor[] processors = new CellProcessor[]	{   new ParseInt(), // cableNumber
 																		        new NotNull(), // dateTime
@@ -49,7 +50,7 @@ public class CSVReader implements Callable<Void>{
 	
 	public CSVReader() {
 		this.dataBaseWriter = Executors.newSingleThreadExecutor();
-		this.resultQueue = new ArrayBlockingQueue<CableBean>(MAX_CABLES_LOADED);
+		this.resultQueue = new ArrayBlockingQueue<Cable>(MAX_CABLES_LOADED);
 	}
 
 	@Override
@@ -67,8 +68,8 @@ public class CSVReader implements Callable<Void>{
 		
         try {    
         	
-        	CableBean cable;
-            while( (cable = cableReader.read(CableBean.class, CableBean.getHeaderArray(), processors)) != null ) 
+        	Cable cable;
+            while( (cable = cableReader.read(Cable.class, Cable.getHeaderArray(), processors)) != null ) 
             	resultQueue.put(cable);
                 
         } catch (IOException | InterruptedException e) {

@@ -1,16 +1,7 @@
-package cablegate.importer;
+package cablegate.models;
 
 
-public class CableBean {
-	private static final String[] HEADER_ARRAY ={	"cableID",
-													"dateTime", 
-													"cableNumber",
-													"sender",
-													"classification",
-													"referrals",
-													"mailingList",
-													"cableText" 
-												};
+public class Cable {
 
 	private int cableID;
 	
@@ -27,7 +18,11 @@ public class CableBean {
 	private String mailingList;
 	
 	private String cableText;
-
+	
+	public Cable(){
+		
+	}
+	
 	public int getCableID() {
 		return cableID;
 	}
@@ -106,5 +101,15 @@ public class CableBean {
 				+ getReferrals() + ","
 				+ getMailingList();
 	}
+	
+	private static final String[] HEADER_ARRAY ={	"cableID",
+		"dateTime", 
+		"cableNumber",
+		"sender",
+		"classification",
+		"referrals",
+		"mailingList",
+		"cableText" 
+	};
 	
 }

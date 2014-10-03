@@ -1,5 +1,6 @@
 package cablegate.importer;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -17,6 +18,7 @@ import org.datafx.controller.flow.action.ActionTrigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cablegate.infrastructure.DataBaseManager;
 import cablegate.infrastructure.SystemConfig;
 
 @FXMLController(value="Importer.fxml")
@@ -28,6 +30,9 @@ public class ImporterController {
 	
 	@FXML
 	Label inputPromptLabel;
+	
+	@FXML
+	Label warningLabel;
 	
 	@FXML
 	TextField directoryField;
@@ -45,13 +50,24 @@ public class ImporterController {
 			log.debug("Setting cable directory path to {} and creating database",directoryProperty.get());
 			SystemConfig.setArchiveDirectory(directoryProperty.get());
 			importButton.setDisable(true);
-	//TODO:	importingDB = DataBaseManager.instantiateDatabase();
+			importingDB = DataBaseManager.instantiateDatabase();
+			
+			try {
+				importingDB.get();
+			} catch (InterruptedException | ExecutionException e) {
+				log.error("Something went wrong while importing!", e);
+			}
+			
+			importButton.setDisable(false);
+		}else{
+			warningLabel.setVisible(true);
 		}
     }
 	
     @PostConstruct
     public void init() {
         directoryField.textProperty().bindBidirectional(directoryProperty);
+        warningLabel.setVisible(false);
     }
 	
 	
