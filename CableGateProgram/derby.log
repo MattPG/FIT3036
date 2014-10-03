@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Sat Oct 04 00:04:12 EST 2014:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance a816c00e-0148-d653-3b2f-000009573c78 
+Sat Oct 04 00:44:13 EST 2014:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance a816c00e-0148-d677-de58-00000d594ba0 
 on database directory D:\Users\Matthew\git\FIT3036\CableGateProgram\DerbyDB with class loader sun.misc.Launcher$AppClassLoader@73d16e93 
 Loaded from file:/C:/Users/Matthew/.m2/repository/org/apache/derby/derby/10.10.2.0/derby-10.10.2.0.jar
 java.vendor=Oracle Corporation

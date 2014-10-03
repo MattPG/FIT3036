@@ -30,14 +30,15 @@ public class Main extends Application{
 		try {
 			  JoranConfigurator configurator = new JoranConfigurator();
 			  configurator.setContext(context);
+			  context.reset();
 			  
 			  String systemLogFilePath = null;
-			  
 			  if(SystemUtils.IS_OS_WINDOWS){
 				  systemLogFilePath = System.getProperty("user.dir") + "\\src\\cablegate\\infrastructure\\logback.xml";
 			  }else {
 				  systemLogFilePath = System.getProperty("user.dir") + "/src/cablegate/infrastructure/logback.xml";
 			  }
+			  
 			  configurator.doConfigure(systemLogFilePath); // loads logback file
 			} catch (JoranException je) {
 			  // StatusPrinter will handle this
