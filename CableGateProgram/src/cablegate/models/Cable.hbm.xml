@@ -11,8 +11,15 @@
 		<property name="cableNumber" column="CABLE_NUMBER"/>
 		<property name="sender" column="SENDER"/>
 		<property name="classification" column="CLASSIFICATION"/>
-		<property name="referrals" column="REFERRALS"/>
-		<property name="mailingList" column="MAILING_LIST"/>
-		<property name="cableText" column="CABLE_TEXT"/>
+		
+		<property name="referrals">
+			<column name="REFERRALS" length="2000"/>
+		</property>
+		<property name="mailingList">
+			<column name="MAILING_LIST" length="10000"/>
+		</property>
+		<property name="cableText" type="clob">
+			<column name="CABLE_TEXT" length="200000"/>
+		</property>
 	</class>
 </hibernate-mapping>

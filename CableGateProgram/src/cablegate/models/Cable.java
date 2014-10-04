@@ -1,8 +1,16 @@
 package cablegate.models;
 
+import java.sql.Clob;
+import java.sql.SQLException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 
 public class Cable {
-
+	private static final Logger log = LoggerFactory.getLogger(Cable.class);
+	
 	private int cableID;
 	
 	private String dateTime;
@@ -17,11 +25,11 @@ public class Cable {
 	
 	private String mailingList;
 	
-	private String cableText;
+	private String cableString;	// For runtime processing
 	
-	public Cable(){
-		
-	}
+	private Clob cableText;	// For database storage
+	
+	public Cable(){}
 	
 	public int getCableID() {
 		return cableID;
@@ -50,11 +58,15 @@ public class Cable {
 	public String getMailingList() {
 		return mailingList;
 	}
-
-	public String getCableText() {
-		return cableText;
+	
+	public String getCableString() {
+		return cableString;
 	}
 
+	public Clob getCableText() {
+		return cableText;
+	}
+	
 	public void setCableID(int cableID) {
 		this.cableID = cableID;
 	}
@@ -83,12 +95,26 @@ public class Cable {
 		this.mailingList = mailingList;
 	}
 
-	public void setCableText(String cableText) {
+	public void setCableString(String cableString) {
+		this.cableString = cableString;
+	}
+
+	public void setCableText(Clob cableText) {
 		this.cableText = cableText;
 	}
 	
-	public static String[] getHeaderArray() {
-		return HEADER_ARRAY;
+	public Cable convertText(){
+		String buffer = "";
+		if(cableText != null){
+			try {
+				long length = cableText.length();
+				buffer = cableText.getSubString(0, (int) length);				
+			} catch (SQLException e) {
+				log.error("Failed to convert clob!", e);
+			}
+		}
+		this.setCableString(buffer);	
+		return this;
 	}
 
 	@Override
@@ -97,19 +123,6 @@ public class Cable {
 				+ getDateTime() + ","
 				+ getCableNumber() + ","
 				+ getSender() + ","
-				+ getClassification() + ","
-				+ getReferrals() + ","
-				+ getMailingList();
-	}
-	
-	private static final String[] HEADER_ARRAY ={	"cableID",
-		"dateTime", 
-		"cableNumber",
-		"sender",
-		"classification",
-		"referrals",
-		"mailingList",
-		"cableText" 
+				+ getClassification();
 	};
-	
 }

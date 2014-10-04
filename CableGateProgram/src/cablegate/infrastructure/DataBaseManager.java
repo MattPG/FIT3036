@@ -1,27 +1,17 @@
 package cablegate.infrastructure;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.concurrent.CompletionService;
-import java.util.concurrent.ExecutorCompletionService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
 import org.apache.commons.lang3.SystemUtils;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
-
-import cablegate.importer.CSVReader;
-import cablegate.models.Cable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DataBaseManager {
-
+	private static final Logger log = LoggerFactory.getLogger(DataBaseManager.class);
+	
 	private static final String DATABASE_DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
 	private static final String DATABASE_NAME = "DerbyDB";
 	private static final String DATABASE_PROTOCOL = "jdbc:derby:";
@@ -46,20 +36,14 @@ public class DataBaseManager {
 													"REFERRALS,"+
 													"MAILING_LIST,"+
 													"CABLE_TEXT)";
-		
+	
 	public static void configureHibernateSession(){
+		// Load hibernate.cfg.xml and programmatically add database location
 		Configuration configuration = new Configuration();
 		configuration.configure("cablegate/infrastructure/hibernate.cfg.xml");
-
-		String systemDatabaseLocation = null;
-		if(SystemUtils.IS_OS_WINDOWS){
-			systemDatabaseLocation= DATABASE_PROTOCOL + System.getProperty("user.dir") + '\\' + DATABASE_NAME;
-		}else {
-			systemDatabaseLocation= DATABASE_PROTOCOL + System.getProperty("user.dir") + '/' + DATABASE_NAME;
-		}
+		configuration.setProperty("hibernate.connection.url", getDatabaseURL());
 		
-		configuration.setProperty("hibernate.connection.url", systemDatabaseLocation);
-		
+		// Bind the configurations to a sessionFactory
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();        
 		sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 	}
@@ -70,22 +54,6 @@ public class DataBaseManager {
 	
 	public static void closeHibernateSession(){
 		sessionFactory.close();
-	}
-	
-	public static void addBatch(PreparedStatement pstmt, Cable cable){
-		try {
-			pstmt.setInt(1, cable.getCableID());
-			pstmt.setString(2, cable.getDateTime());
-			pstmt.setString(3, cable.getCableNumber());
-			pstmt.setString(4, cable.getSender());
-			pstmt.setString(5, cable.getClassification());
-			pstmt.setString(6, cable.getReferrals());
-			pstmt.setString(7, cable.getMailingList());
-			pstmt.setString(8, cable.getCableText());
-			pstmt.addBatch();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public static String getDatabaseProtocol(){
@@ -104,20 +72,14 @@ public class DataBaseManager {
 		return TABLE_NAME;
 	}
 	
-	public static Connection getConnection() {
-		Connection conn = null;
-		
-		try {
-			conn = DriverManager.getConnection(getDatabaseURL());
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return conn;
-	}
-	
 	public static String getDatabaseURL(){
-		return getDatabaseProtocol() + getDatabaseName() + ";create=true";
+		String systemDatabaseLocation = getDatabaseProtocol() + SystemUtils.getUserDir();
+		if(SystemUtils.IS_OS_WINDOWS){
+			systemDatabaseLocation += ('\\' + DATABASE_NAME + ";create=true");
+		}else {
+			systemDatabaseLocation += ('/' + DATABASE_NAME + ";create=true");
+		}
+		return systemDatabaseLocation;
 	}
 	
 	public static String getTableSchemaCreate() {
@@ -130,29 +92,5 @@ public class DataBaseManager {
 	
 	public static String getTableSchemaWithQueryValues() {
 		return TABLE_SCHEMA  + " VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
-	}
-	
-	public static void searchTable(){
-		
-	}
-	
-	public static void createTable(Statement stmt, String tableName, String tableSchema){
-		try {
-			stmt.execute("CREATE TABLE " + tableName + tableSchema);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
-	public static Future<Void> instantiateDatabase(){
-		
-		// Create the thread to handle cable.csv reading
-    	CompletionService<Void> singleThread = new ExecutorCompletionService<Void>(Executors.newSingleThreadExecutor());
-		
-    	// Run the cable.csv reading thread
-    	Future<Void> allCablesRead = singleThread.submit(new CSVReader());
-    	
-    	return allCablesRead;  	
 	}
 }

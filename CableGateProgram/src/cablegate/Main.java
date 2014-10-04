@@ -26,46 +26,19 @@ public class Main extends Application{
 	 @Override  
 	 public void start(Stage primaryStage) throws Exception {  
 		// Setup the Logger configurations
-		LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
-		try {
-			  JoranConfigurator configurator = new JoranConfigurator();
-			  configurator.setContext(context);
-			  context.reset();
-			  
-			  String systemLogFilePath = null;
-			  if(SystemUtils.IS_OS_WINDOWS){
-				  systemLogFilePath = System.getProperty("user.dir") + "\\src\\cablegate\\infrastructure\\logback.xml";
-			  }else {
-				  systemLogFilePath = System.getProperty("user.dir") + "/src/cablegate/infrastructure/logback.xml";
-			  }
-			  
-			  configurator.doConfigure(systemLogFilePath); // loads logback file
-			} catch (JoranException je) {
-			  // StatusPrinter will handle this
-			} catch (Exception ex) {
-			  ex.printStackTrace(); // Just in case, so we see a stacktrace
-		}
-		StatusPrinter.printInCaseOfErrorsOrWarnings(context); // Internal status data is printed in case of warnings or errors.
-
+		configureLogger();
+        
+        // Setup the configurations for Hibernate
+        DataBaseManager.configureHibernateSession();
 		 
 		// Setup and display the main stage
 		primaryStage.setTitle("WikiBrow");
-		
 		Flow flow = new Flow(RootController.class);
 		FlowHandler flowHandler = flow.createHandler();
 		StackPane mainPane = flowHandler.start();
 		
         primaryStage.setScene(new Scene(mainPane, 640, 480));
         primaryStage.show();
-        
-        // Check if the database exists and set parameters in SystemConfig
-        File dbFile = new File(DataBaseManager.getDatabaseName());
-        if(dbFile.isDirectory()){
-        	SystemConfig.setDatabaseDirectory(DataBaseManager.getDatabaseName());
-        }
-        
-        // Setup the configurations for Hibernate
-        DataBaseManager.configureHibernateSession();
 	 }  
 	 
 	 public static void main(String[] args) {  
@@ -74,5 +47,28 @@ public class Main extends Application{
 	 
 	 public void stop() throws Exception{
 		 DataBaseManager.closeHibernateSession();
+	 }
+	 
+	 private void configureLogger(){
+		 LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
+			try {
+				  JoranConfigurator configurator = new JoranConfigurator();
+				  configurator.setContext(context);
+				  context.reset();
+				  
+				  String systemLogFilePath = null;
+				  if(SystemUtils.IS_OS_WINDOWS){
+					  systemLogFilePath = SystemUtils.getUserDir() + "\\src\\cablegate\\infrastructure\\logback.xml";
+				  }else {
+					  systemLogFilePath = SystemUtils.getUserDir() + "/src/cablegate/infrastructure/logback.xml";
+				  }
+				  
+				  configurator.doConfigure(systemLogFilePath); // loads logback file
+				} catch (JoranException je) {
+				  // StatusPrinter will handle this
+				} catch (Exception ex) {
+				  ex.printStackTrace(); // Just in case, so we see a stacktrace
+			}
+			StatusPrinter.printInCaseOfErrorsOrWarnings(context); // Internal status data is printed in case of warnings or errors.
 	 }
 }
