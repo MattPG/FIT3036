@@ -52,7 +52,7 @@ public class ImporterController {
 	
 	private StringProperty directoryProperty = new SimpleStringProperty();
 
-	private BlockingQueue<Cable> commQueue = new ArrayBlockingQueue<Cable>(1000);
+	private BlockingQueue<Cable> commQueue = new ArrayBlockingQueue<Cable>(200);
 	private CSVReader archiveReader = new CSVReader(commQueue);
 	private DBWriter dbWriter = new DBWriter(commQueue);
 	
