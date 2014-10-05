@@ -4,7 +4,7 @@ package cablegate.infrastructure;
 public class SystemConfig {
 	
 	private static String archiveDirectory = null;
-	private static int javaRam = (int) (Runtime.getRuntime().maxMemory() / (1024^2)) - 500; // ram in MB
+	private static long javaRam = Runtime.getRuntime().maxMemory() / 1024L / 1024L;
 			
 	public static String getArchiveDirectory() {
 		return archiveDirectory;
@@ -14,7 +14,7 @@ public class SystemConfig {
 		SystemConfig.archiveDirectory = archiveDirectory;
 	}
 	
-	public static int getJavaRam(){
+	public static long getJavaRam(){
 		return javaRam;
 	}
 }

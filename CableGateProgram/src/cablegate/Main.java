@@ -27,7 +27,6 @@ public class Main extends Application{
 		// Setup the Logger configurations
 		configureLogger();
 
-		log.info("{}", SystemConfig.getJavaRam());
         // Setup the configurations for Hibernate
         DataBaseManager.configureHibernateSession();
 		 
