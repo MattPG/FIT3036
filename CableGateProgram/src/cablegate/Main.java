@@ -22,10 +22,10 @@ public class Main extends Application{
 	private static final Logger log = LoggerFactory.getLogger(Main.class);
 
 	 @Override  
-	 public void start(Stage primaryStage) throws Exception {  
+	 public void start(Stage primaryStage) throws Exception {
 		// Setup the Logger configurations
 		configureLogger();
-        
+		
         // Setup the configurations for Hibernate
         DataBaseManager.configureHibernateSession();
 		 
