@@ -19,18 +19,14 @@ public class BrowserController {
 	
 	@FXML
 	private TabPane tabPane;
-	
-	
-	
+
 	@PostConstruct
 	public void init() {
 		Flow tableFlow = new Flow(TableController.class);
 		try {
 			tabPane.getTabs().add(tableFlow.startInTab());
 		} catch (FlowException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("failed to add tableFlow to browser", e);
 		}
     }
-	
 }

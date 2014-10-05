@@ -1,8 +1,7 @@
 package cablegate;
 
-import java.io.File;
-
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -14,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cablegate.infrastructure.DataBaseManager;
-import cablegate.infrastructure.SystemConfig;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.joran.spi.JoranException;
@@ -37,7 +35,8 @@ public class Main extends Application{
 		FlowHandler flowHandler = flow.createHandler();
 		StackPane mainPane = flowHandler.start();
 		
-        primaryStage.setScene(new Scene(mainPane, 640, 480));
+        primaryStage.setScene(new Scene(mainPane, 800, 500));
+        primaryStage.setOnCloseRequest(e -> Platform.exit());
         primaryStage.show();
 	 }  
 	 

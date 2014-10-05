@@ -103,18 +103,19 @@ public class Cable {
 		this.cableText = cableText;
 	}
 	
-	public Cable convertText(){
+	public void convertText(){
 		String buffer = "";
 		if(cableText != null){
 			try {
 				long length = cableText.length();
-				buffer = cableText.getSubString(0, (int) length);				
+				buffer = cableText.getSubString(1, (int) length);	
 			} catch (SQLException e) {
 				log.error("Failed to convert clob!", e);
 			}
+		}else {
+			log.error("Null clob detected!");
 		}
-		this.setCableString(buffer);	
-		return this;
+		this.setCableString(buffer);
 	}
 
 	@Override

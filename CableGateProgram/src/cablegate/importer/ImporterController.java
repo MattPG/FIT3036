@@ -81,7 +81,6 @@ public class ImporterController {
         importUpdateLabel.setVisible(false);
         warningLabel.setVisible(false);
         
-        
         // Assign progress message to the message update values of dbWriter
         dbWriter.messageProperty().addListener(new ChangeListener<String>() {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {

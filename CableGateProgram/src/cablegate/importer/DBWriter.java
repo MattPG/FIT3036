@@ -29,14 +29,14 @@ public class DBWriter extends Task<Void> {
 	@Override
 	public Void call() throws Exception {
 		log.info("Adding cables to DataBase...");
-		updateMessage("Importing...");
+		updateMessage("Importing, this may take a while...");
 		DataBaseManager.openSession().doWork(new Worker(resultQueue));
 		return null;
 	}
 
     @Override protected void succeeded() {
         super.succeeded();
-        updateMessage("Import Complete!");
+        updateMessage("Import Complete! Please restart the application.");
 		log.info("Import Complete!");
     }
 	

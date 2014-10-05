@@ -7,19 +7,19 @@
 <hibernate-mapping package="cablegate.models">
 	<class table="CABLES" name="Cable">
 		<id name="cableID" column="CABLE_ID"/>	
-		<property name="dateTime" column="DATE_TIME"/>
-		<property name="cableNumber" column="CABLE_NUMBER"/>
-		<property name="sender" column="SENDER"/>
-		<property name="classification" column="CLASSIFICATION"/>
 		
+		<property name="dateTime" column="DATE_TIME" not-null="true"/>
+		<property name="cableNumber" column="CABLE_NUMBER" not-null="true"/>
+		<property name="sender" column="SENDER" not-null="true"/>
+		<property name="classification" column="CLASSIFICATION" not-null="true"/>
 		<property name="referrals">
-			<column name="REFERRALS" length="2000"/>
+			<column name="REFERRALS" length="2000" not-null="false"/>
 		</property>
 		<property name="mailingList">
-			<column name="MAILING_LIST" length="10000"/>
+			<column name="MAILING_LIST" length="10000" not-null="true"/>
 		</property>
 		<property name="cableText" type="clob">
-			<column name="CABLE_TEXT" length="200000"/>
+			<column name="CABLE_TEXT" length="200000" not-null="true"/>
 		</property>
 	</class>
 </hibernate-mapping>
