@@ -12,13 +12,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cablegate.infrastructure.DataBaseManager;
+import cablegate.infrastructure.SystemConfig;
 import cablegate.models.Cable;
 
 public class DBWriter extends Task<Void> {
 	private static final Logger log = LoggerFactory.getLogger(DBWriter.class);
-	private final int BATCH_SIZE = 10000;
 	private final int MAX_CABLES = 251287;
-	private final int PROGRESS_SIZE = 2513;
+	private final int PROGRESS_SIZE = 2500; // 1% step of MAX_CABLES
+	private final int BATCH_SIZE = 100;
 	
 	private final BlockingQueue<Cable> resultQueue;
 	
