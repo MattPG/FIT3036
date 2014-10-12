@@ -23,9 +23,6 @@
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="264.0">
-                     <children>
-                        <Button fx:id="exploreButton" mnemonicParsing="false" text="Explore Selected Cable..." />
-                     </children>
                      <HBox.margin>
                         <Insets right="15.0" />
                      </HBox.margin>

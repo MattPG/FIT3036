@@ -6,6 +6,7 @@ import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -15,6 +16,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -43,10 +46,6 @@ public class TableController {
 	
 	@FXML
 	Button searchButton;
-	
-	@FXML
-	@ActionTrigger("ExploreCable")
-	Button exploreButton;
 	
 	@FXML
 	TableView<Cable> tablePane;	
@@ -81,14 +80,6 @@ public class TableController {
 	public void onPrevPage(){
 		currPage--;
 		refresh();
-	}
-	
-	@ActionMethod("ExploreCable")
-	public void onExploreCable(){
-		Cable selectedCable = tablePane.getSelectionModel().getSelectedItem();
-		if(selectedCable != null){
-			createCableWindow(selectedCable);			
-		}		
 	}
 	
 	private void updatePageNum(){
@@ -127,6 +118,9 @@ public class TableController {
 		updatePageNum();
 	}
 	
+	/*
+	 * Creates a pop-out window to display cable data
+	 */
 	private void createCableWindow(Cable cable){
 		// Create text labels
 		Label mailingListLabel = new Label(cable.getMailingList());
@@ -197,5 +191,20 @@ public class TableController {
 		
 		tablePane.getColumns().setAll(cols);
 		tablePane.setColumnResizePolicy(param -> true);
+		
+		// Set popup window on double-click
+		tablePane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent mouseEvent) {
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+                    if (mouseEvent.getClickCount() == 2) {
+                    	Cable lastSelectedCable = tablePane.getSelectionModel().getSelectedItem();
+                    	if(lastSelectedCable != null){ // Check a cable has actually been selected
+                    		createCableWindow(lastSelectedCable);		
+                    	}
+                    }
+                }				
+			}
+		});
 	}
 }

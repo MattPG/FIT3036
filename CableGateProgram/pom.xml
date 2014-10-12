@@ -68,10 +68,21 @@
 	   <artifactId>hibernate-core</artifactId>
 	   <version>4.3.6.Final</version>
 	</dependency>
+	<dependency>
+	   <groupId>org.hibernate</groupId>
+	   <artifactId>hibernate-search</artifactId>
+	   <version>4.5.1.Final</version>
+	</dependency>
+	<dependency>
+	   <groupId>org.hibernate</groupId>
+	   <artifactId>hibernate-search-analyzers</artifactId>
+	   <version>4.5.1.Final</version>
+	</dependency>
 	
+	<dependency>
 	 <groupId>org.apache.commons</groupId>
  		 <artifactId>commons-lang3</artifactId>
  	 <version>3.3.2</version>
-
+	</dependency>
   </dependencies>
 </project>

@@ -9,7 +9,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <top>
-      <Label fx:id="outlineLabel" text="This utility allows you to import the cables.csv file. No error checking of the input directory or filetype is made so please ensure it is correct.&#10;&#10;Importing may take up to 10 minutes.&#10;&#10;Enter the full system directory with filename, for example:&#10;C:\Program Files\Cables\cables.csv&#10;&#10;If you do not have a copy of the archive, it can be downloaded here:&#10;https://archive.org/details/wikileaks-cables-csv" textOverrun="WORD_ELLIPSIS" wrapText="true" BorderPane.alignment="CENTER">
+      <Label fx:id="outlineLabel" text="This utility allows you to import the cables.csv file. No error checking of the input directory or filetype is made so please ensure it is correct.&#10;&#10;Importing may take a long time.&#10;&#10;Enter the full system directory with filename, for example:&#10;C:\Program Files\Cables\cables.csv&#10;&#10;If you do not have a copy of the archive, it can be downloaded here:&#10;https://archive.org/details/wikileaks-cables-csv" textOverrun="WORD_ELLIPSIS" wrapText="true" BorderPane.alignment="CENTER">
          <padding>
             <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
          </padding>
@@ -26,8 +26,11 @@
                </HBox.margin></Button>
          </children>
          <BorderPane.margin>
-            <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
+            <Insets />
          </BorderPane.margin>
+         <padding>
+            <Insets left="12.0" />
+         </padding>
       </HBox>
    </center>
    <bottom>
@@ -38,11 +41,15 @@
          <children>
             <VBox>
                <children>
-                  <Label fx:id="importUpdateLabel" text="Hi :)">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Label>
+                  <HBox>
+                     <children>
+                        <Label fx:id="importUpdateLabel" text="Hi :)">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
                   <ProgressBar fx:id="importProgressBar" prefHeight="20.0" prefWidth="493.0" progress="0.0" />
                </children>
             </VBox>

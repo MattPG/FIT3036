@@ -7,14 +7,22 @@ import java.util.concurrent.BlockingQueue;
 
 import javafx.concurrent.Task;
 
+import org.hibernate.CacheMode;
+import org.hibernate.FlushMode;
+import org.hibernate.ScrollMode;
+import org.hibernate.ScrollableResults;
+import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
+import org.hibernate.search.FullTextSession;
+import org.hibernate.search.Search;
+import org.hibernate.search.batchindexing.MassIndexerProgressMonitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cablegate.infrastructure.DataBaseManager;
-import cablegate.infrastructure.SystemConfig;
 import cablegate.models.Cable;
 
+/* Import cables wrapper class for a hibernate worker */
 public class DBWriter extends Task<Void> {
 	private static final Logger log = LoggerFactory.getLogger(DBWriter.class);
 	private final int MAX_CABLES = 251287;
@@ -22,30 +30,74 @@ public class DBWriter extends Task<Void> {
 	private final int BATCH_SIZE = 100;
 	
 	private final BlockingQueue<Cable> resultQueue;
+	private Session session;
+	private FullTextSession ftSession;
 	
 	public DBWriter(BlockingQueue<Cable> resultQueue) {
 		this.resultQueue = resultQueue;
 	}
 	
-	@Override
-	public Void call() throws Exception {
-		log.info("Adding cables to DataBase...");
+	/*
+	 * (non-Javadoc)
+	 * @see javafx.concurrent.Task#call()
+	 * Initial function call
+	 */
+	@Override public Void call() throws Exception {
+		session = DataBaseManager.openSession();
+		
 		updateMessage("Importing, this may take a while...");
-		DataBaseManager.openSession().doWork(new Worker(resultQueue));
+		log.info("Importing, this may take a while...");
+		session.doWork(new CableImporter(resultQueue));
+		
+        updateMessage("Import Complete! Indexing Entries...");
+		log.info("Import Complete! Indexing Entries...");
+		ftSession = Search.getFullTextSession(session);
+		ftSession.setFlushMode(FlushMode.MANUAL);
+		ftSession.setCacheMode(CacheMode.IGNORE);
+		ftSession.beginTransaction();
+		
+		//Scrollable results will avoid loading too many objects in memory
+		ScrollableResults results = ftSession.createCriteria(Cable.class)
+		    .setFetchSize(BATCH_SIZE)
+		    .scroll(ScrollMode.FORWARD_ONLY);
+		int index = 0;
+		while(results.next()) {
+		    index++;
+		    ftSession.index(results.get(0)); //index each element
+		    
+			// Check if it's time to commit this batch
+		    if (index % BATCH_SIZE == 0) {
+		    	ftSession.flushToIndexes(); //apply changes to indexes
+		    	ftSession.clear(); //free memory since the queue is processed
+		    }
+			
+			// Check if we should update progress on UI thread
+			if(index % PROGRESS_SIZE == 0){
+				updateProgress(index + MAX_CABLES, 2*MAX_CABLES);
+				log.debug("Indexed {}%", (index*100) / MAX_CABLES);
+			}
+		}
+		ftSession.getTransaction().commit();
+		session.close();
 		return null;
 	}
-
+	
+	/*
+	 * (non-Javadoc)
+	 * @see javafx.concurrent.Task#succeeded()
+	 */
     @Override protected void succeeded() {
         super.succeeded();
-        updateMessage("Import Complete! Please restart the application.");
-		log.info("Import Complete!");
-    }
-	
-	private class Worker implements Work {
+        updateMessage("Indexing Complete! Please restart the application.");
+		log.info("Indexing Complete!");
+    }    
+    
+    /* Worker that imports the cables and allows for progress updates */
+	private class CableImporter implements Work {
 		
 		private BlockingQueue<Cable> workerQueue;
 		
-		public Worker(BlockingQueue<Cable> inQueue){
+		public CableImporter(BlockingQueue<Cable> inQueue){
 			workerQueue = inQueue;
 		}
 		
@@ -85,7 +137,7 @@ public class DBWriter extends Task<Void> {
 					
 					// Check if we should update progress on UI thread
 					if(insertedCount % PROGRESS_SIZE == 0){
-						updateProgress(insertedCount, MAX_CABLES);
+						updateProgress(insertedCount, 2*MAX_CABLES);
 						log.debug("Imported {}%", (insertedCount*100) / MAX_CABLES);
 					}
 				}
@@ -110,5 +162,57 @@ public class DBWriter extends Task<Void> {
 			}
 		}
 	}
+	
+    /* allows for progress updates while indexing */
+    private class JFXIndexer implements MassIndexerProgressMonitor{		
+		@Override
+		public void documentsAdded(long increment) {
+			log.debug("Docs added: {}", increment);
+		}
+		
+		/*
+		 * (non-Javadoc)
+		 * @see org.hibernate.search.batchindexing.MassIndexerProgressMonitor#addToTotalCount(long)
+		 * The total count of entities to be indexed is added here; It could be called more than once, the implementation should add them up.
+		 * This is invoked several times and concurrently during the indexing process.
+		 */
+		@Override
+		public void addToTotalCount(long count) {
+			log.debug("Add Total Count: {}", count);
+		}
+		
+		/*
+		 * (non-Javadoc)
+		 * @see org.hibernate.search.batchindexing.MassIndexerProgressMonitor#documentsBuilt(int)
+		 * The number of Documents built; This is invoked several times and concurrently during the indexing process.
+		 */
+		@Override
+		public void documentsBuilt(int number) {
+			log.debug("Docs built: {}", number);
+		}
+		
+		/*
+		 * (non-Javadoc)
+		 * @see org.hibernate.search.batchindexing.MassIndexerProgressMonitor#entitiesLoaded(int)
+		 * 
+		 * The number of entities loaded from database; This is invoked several times and concurrently during the indexing process.
+		 */
+		@Override
+		public void entitiesLoaded(int size) {
+			updateProgress(size + MAX_CABLES, 2*MAX_CABLES);		
+			log.debug("Updating indexing progress {}/{}", size, 2*MAX_CABLES);
+		}
+		
+		/*
+		 * (non-Javadoc)
+		 * @see org.hibernate.search.batchindexing.MassIndexerProgressMonitor#indexingCompleted()
+		 * Invoked when the indexing is completed.
+		 */
+		@Override
+		public void indexingCompleted() {
+			log.info("Indexing finished!");
+		}
+    	
+    }
 }
 

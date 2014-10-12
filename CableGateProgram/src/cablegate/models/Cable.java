@@ -3,31 +3,74 @@ package cablegate.models;
 import java.sql.Clob;
 import java.sql.SQLException;
 
+import org.apache.solr.analysis.LowerCaseFilterFactory;
+import org.apache.solr.analysis.StandardTokenizerFactory;
+import org.apache.solr.analysis.StopFilterFactory;
+import org.hibernate.search.annotations.AnalyzerDef;
+import org.hibernate.search.annotations.Boost;
+import org.hibernate.search.annotations.DocumentId;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.FieldBridge;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Parameter;
+import org.hibernate.search.annotations.TermVector;
+import org.hibernate.search.annotations.TokenFilterDef;
+import org.hibernate.search.annotations.TokenizerDef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-
+@Indexed
+@AnalyzerDef(name = "CableAnalyser",
+tokenizer = @TokenizerDef(factory = StandardTokenizerFactory.class),
+filters = {
+	@TokenFilterDef(factory = LowerCaseFilterFactory.class),
+//	@TokenFilterDef(factory = SynonymFilterFactory.class),
+//	@TokenFilterDef(factory = SnowballPorterFilterFactory.class, params = {
+//		@Parameter(name = "language", value = "English")
+//	}),
+	@TokenFilterDef(factory = StopFilterFactory.class, params = {
+		@Parameter(name="words", value= "stopwords.txt"),
+		@Parameter(name="ignoreCase", value="true")
+	})
+})
 public class Cable {
 	private static final Logger log = LoggerFactory.getLogger(Cable.class);
 	
+//	@Boost(2f)
+	@DocumentId
+	@Field(termVector = TermVector.WITH_POSITION_OFFSETS)
 	private int cableID;
-	
+
+//	@Boost(2f)
+	@Field(termVector = TermVector.WITH_POSITION_OFFSETS)
 	private String dateTime;
-	
+
+//	@Boost(3f)
+	@Field(termVector = TermVector.WITH_POSITION_OFFSETS)
 	private String cableNumber;
-	
+
+//	@Boost(2f)
+	@Field(termVector = TermVector.WITH_POSITION_OFFSETS)
 	private String sender;
-	
+
+//	@Boost(3f)
+	@Field(termVector = TermVector.WITH_POSITION_OFFSETS)
 	private String classification;
-	
+
+//	@Boost(1.5f)
+	@Field(termVector = TermVector.WITH_POSITION_OFFSETS)
 	private String referrals;
-	
+
+//	@Boost(1.5f)
+	@Field(termVector = TermVector.WITH_POSITION_OFFSETS)
 	private String mailingList;
-	
-	private String cableString;	// For runtime processing
-	
+
+	@Field(termVector = TermVector.WITH_POSITION_OFFSETS)
+	@FieldBridge(impl = ClobToStringBridge.class)
 	private Clob cableText;	// For database storage
+
+	private String cableString;	// For runtime processing
 	
 	public Cable(){}
 	
@@ -103,6 +146,10 @@ public class Cable {
 		this.cableText = cableText;
 	}
 	
+	/*
+	 * Converts the Clob cableText into the String cableString object.
+	 * Note: requires the Connection the retrieved this object to still be open.
+	 */
 	public void convertText(){
 		String buffer = "";
 		if(cableText != null){

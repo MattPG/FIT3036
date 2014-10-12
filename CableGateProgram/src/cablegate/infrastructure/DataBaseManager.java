@@ -16,6 +16,7 @@ public class DataBaseManager {
 	private static final String DATABASE_NAME = "DerbyDB";
 	private static final String DATABASE_PROTOCOL = "jdbc:derby:";
 	private static final String TABLE_NAME = "CABLES";
+	private static final String LUCENE_NAME = "LuceneIndex";
 	
 	private static SessionFactory sessionFactory;
 	
@@ -41,7 +42,10 @@ public class DataBaseManager {
 		// Load hibernate.cfg.xml and programmatically add database location
 		Configuration configuration = new Configuration();
 		configuration.configure("cablegate/infrastructure/hibernate.cfg.xml");
+
 		configuration.setProperty("hibernate.connection.url", getDatabaseURL());
+		configuration.setProperty("hibernate.search.default.indexBase", getLuceneURL());
+		
 		
 		// Bind the configurations to a sessionFactory
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();        
@@ -73,13 +77,23 @@ public class DataBaseManager {
 	}
 	
 	public static String getDatabaseURL(){
-		String systemDatabaseLocation = getDatabaseProtocol() + SystemUtils.getUserDir();
+		String systemDatabaseLocation = getDatabaseProtocol() + SystemUtils.getUserDir().getAbsolutePath();
 		if(SystemUtils.IS_OS_WINDOWS){
 			systemDatabaseLocation += ('\\' + DATABASE_NAME + ";create=true");
 		}else {
 			systemDatabaseLocation += ('/' + DATABASE_NAME + ";create=true");
 		}
 		return systemDatabaseLocation;
+	}
+	
+	public static String getLuceneURL(){
+		String systemLuceneLocation = SystemUtils.getUserDir().getAbsolutePath();
+		if(SystemUtils.IS_OS_WINDOWS){
+			systemLuceneLocation += '\\';
+		}else {
+			systemLuceneLocation += '/';
+		}
+		return systemLuceneLocation + LUCENE_NAME;
 	}
 	
 	public static String getTableSchemaCreate() {
