@@ -18,7 +18,7 @@
 		<property name="mailingList">
 			<column name="MAILING_LIST" length="10000" not-null="true"/>
 		</property>
-		<property name="cableText" type="clob">
+		<property name="cableString" type="materialized_clob">
 			<column name="CABLE_TEXT" length="200000" not-null="true"/>
 		</property>
 	</class>

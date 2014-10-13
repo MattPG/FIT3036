@@ -1,16 +1,11 @@
 package cablegate.models;
 
-import java.sql.Clob;
-import java.sql.SQLException;
-
 import org.apache.solr.analysis.LowerCaseFilterFactory;
 import org.apache.solr.analysis.StandardTokenizerFactory;
 import org.apache.solr.analysis.StopFilterFactory;
 import org.hibernate.search.annotations.AnalyzerDef;
-import org.hibernate.search.annotations.Boost;
 import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.FieldBridge;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.Parameter;
 import org.hibernate.search.annotations.TermVector;
@@ -36,14 +31,14 @@ filters = {
 })
 public class Cable {
 	private static final Logger log = LoggerFactory.getLogger(Cable.class);
-	private static final String[] HEADER_ARRAY = {	"cableID",
+	public static final String[] HEADER_ARRAY = {	"cableID",
 													"dateTime", 
 													"cableNumber",
 													"sender",
 													"classification",
 													"referrals",
 													"mailingList",
-													null
+													"cableString"
 												 };
 			
 //	@Boost(2f)
@@ -76,10 +71,7 @@ public class Cable {
 	private String mailingList;
 
 	@Field(termVector = TermVector.WITH_POSITION_OFFSETS)
-	@FieldBridge(impl = ClobToStringBridge.class)
-	private Clob cableText;	// For database storage
-
-	private String cableString;	// For runtime processing
+	private String cableString;
 	
 	public Cable(){}
 	
@@ -114,10 +106,6 @@ public class Cable {
 	public String getCableString() {
 		return cableString;
 	}
-
-	public Clob getCableText() {
-		return cableText;
-	}
 	
 	public void setCableID(int cableID) {
 		this.cableID = cableID;
@@ -150,42 +138,7 @@ public class Cable {
 	public void setCableString(String cableString) {
 		this.cableString = cableString;
 	}
-
-	public void setCableText(Clob cableText) {
-		this.cableText = cableText;
-	}
 	
-	public static String[] getStringHeader(){
-		String[] buffer = HEADER_ARRAY;
-		buffer[buffer.length -1] = "cableString";
-		return buffer;
-	}
-	
-	public static String[] getClobHeader(){
-		String[] buffer = HEADER_ARRAY;
-		buffer[buffer.length -1] = "cableText";
-		return buffer;		
-	}	
-	
-	/*
-	 * Converts the Clob cableText into the String cableString object.
-	 * Note: requires the Connection the retrieved this object to still be open.
-	 */
-	public void convertText(){
-		String buffer = "";
-		if(cableText != null){
-			try {
-				long length = cableText.length();
-				buffer = cableText.getSubString(1, (int) length);	
-			} catch (SQLException e) {
-				log.error("Failed to convert clob!", e);
-			}
-		}else {
-			log.error("Null clob detected!");
-		}
-		this.setCableString(buffer);
-	}
-
 	@Override
 	public String toString(){
 		return getCableID() + ","

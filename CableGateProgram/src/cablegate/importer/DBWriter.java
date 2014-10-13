@@ -15,7 +15,6 @@ import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
-import org.hibernate.search.batchindexing.MassIndexerProgressMonitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -164,57 +163,5 @@ public class DBWriter extends Task<Void> {
 			}
 		}
 	}
-	
-    /* allows for progress updates while indexing */
-    private class JFXIndexer implements MassIndexerProgressMonitor{		
-		@Override
-		public void documentsAdded(long increment) {
-			log.debug("Docs added: {}", increment);
-		}
-		
-		/*
-		 * (non-Javadoc)
-		 * @see org.hibernate.search.batchindexing.MassIndexerProgressMonitor#addToTotalCount(long)
-		 * The total count of entities to be indexed is added here; It could be called more than once, the implementation should add them up.
-		 * This is invoked several times and concurrently during the indexing process.
-		 */
-		@Override
-		public void addToTotalCount(long count) {
-			log.debug("Add Total Count: {}", count);
-		}
-		
-		/*
-		 * (non-Javadoc)
-		 * @see org.hibernate.search.batchindexing.MassIndexerProgressMonitor#documentsBuilt(int)
-		 * The number of Documents built; This is invoked several times and concurrently during the indexing process.
-		 */
-		@Override
-		public void documentsBuilt(int number) {
-			log.debug("Docs built: {}", number);
-		}
-		
-		/*
-		 * (non-Javadoc)
-		 * @see org.hibernate.search.batchindexing.MassIndexerProgressMonitor#entitiesLoaded(int)
-		 * 
-		 * The number of entities loaded from database; This is invoked several times and concurrently during the indexing process.
-		 */
-		@Override
-		public void entitiesLoaded(int size) {
-			updateProgress(size + MAX_CABLES, 2*MAX_CABLES);		
-			log.debug("Updating indexing progress {}/{}", size, 2*MAX_CABLES);
-		}
-		
-		/*
-		 * (non-Javadoc)
-		 * @see org.hibernate.search.batchindexing.MassIndexerProgressMonitor#indexingCompleted()
-		 * Invoked when the indexing is completed.
-		 */
-		@Override
-		public void indexingCompleted() {
-			log.info("Indexing finished!");
-		}
-    	
-    }
 }
 

@@ -51,7 +51,7 @@ public class CSVReader extends Task<Void> {
 		
         try {    
         	Cable cable;
-            while( (cable = cableReader.read(Cable.class, Cable.getStringHeader(), processors)) != null ){
+            while( (cable = cableReader.read(Cable.class, Cable.HEADER_ARRAY, processors)) != null ){
             	resultQueue.put(cable);      
             }
         } catch (IOException | InterruptedException e) {

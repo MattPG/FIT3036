@@ -126,8 +126,6 @@ public class DatabaseManager {
 		List<Cable> cables = session.createQuery(query).setMaxResults(amount)
 													   .setFirstResult(offset)
 													   .list();
-		
-		cables.forEach(Cable::convertText);  // Turns internal Clob obj. to a String
 				
 		session.getTransaction().commit();
 		session.close();
@@ -152,7 +150,7 @@ public class DatabaseManager {
 		// Create the raw lucene search query
 		org.apache.lucene.search.Query luceneQuery = queryBuilder
 														.keyword()
-														.onFields(Cable.getClobHeader())
+														.onFields(Cable.HEADER_ARRAY)
 														.matching(query)
 														.createQuery();
 		
@@ -162,7 +160,6 @@ public class DatabaseManager {
 									  .setFirstResult(offset)
 									  .list();
 		
-		cables.forEach(Cable::convertText);  // Turns internal Clob obj. to a String
 		ftSession.close();
 		return cables;
 	}
