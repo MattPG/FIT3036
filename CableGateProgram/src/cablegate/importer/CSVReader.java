@@ -28,15 +28,6 @@ public class CSVReader extends Task<Void> {
 	private BufferedReader stream;
 	private final BlockingQueue<Cable> resultQueue;
 	private ICsvBeanReader cableReader;
-	private static final String[] HEADER_ARRAY = {	"cableID",
-													"dateTime", 
-													"cableNumber",
-													"sender",
-													"classification",
-													"referrals",
-													"mailingList",
-													"cableString" 
-												 };
 	
 	private final CellProcessor[] processors = new CellProcessor[]	{   new ParseInt(), // cableID
 																        new NotNull(), // dateTime
@@ -60,7 +51,7 @@ public class CSVReader extends Task<Void> {
 		
         try {    
         	Cable cable;
-            while( (cable = cableReader.read(Cable.class, HEADER_ARRAY, processors)) != null ){
+            while( (cable = cableReader.read(Cable.class, Cable.getStringHeader(), processors)) != null ){
             	resultQueue.put(cable);      
             }
         } catch (IOException | InterruptedException e) {

@@ -36,7 +36,16 @@ filters = {
 })
 public class Cable {
 	private static final Logger log = LoggerFactory.getLogger(Cable.class);
-	
+	private static final String[] HEADER_ARRAY = {	"cableID",
+													"dateTime", 
+													"cableNumber",
+													"sender",
+													"classification",
+													"referrals",
+													"mailingList",
+													null
+												 };
+			
 //	@Boost(2f)
 	@DocumentId
 	@Field(termVector = TermVector.WITH_POSITION_OFFSETS)
@@ -145,6 +154,18 @@ public class Cable {
 	public void setCableText(Clob cableText) {
 		this.cableText = cableText;
 	}
+	
+	public static String[] getStringHeader(){
+		String[] buffer = HEADER_ARRAY;
+		buffer[buffer.length -1] = "cableString";
+		return buffer;
+	}
+	
+	public static String[] getClobHeader(){
+		String[] buffer = HEADER_ARRAY;
+		buffer[buffer.length -1] = "cableText";
+		return buffer;		
+	}	
 	
 	/*
 	 * Converts the Clob cableText into the String cableString object.

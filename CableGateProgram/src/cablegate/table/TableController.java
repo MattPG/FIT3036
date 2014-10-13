@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -26,12 +28,11 @@ import javax.annotation.PostConstruct;
 import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.ActionMethod;
 import org.datafx.controller.flow.action.ActionTrigger;
-import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cablegate.BrowserController;
-import cablegate.infrastructure.DataBaseManager;
+import cablegate.infrastructure.DatabaseManager;
 import cablegate.models.Cable;
 
 @FXMLController(value="Table.fxml", title="Table")
@@ -39,12 +40,15 @@ public class TableController {
 	private static final Logger log = LoggerFactory.getLogger(BrowserController.class);
 	private final int NUM_ELEMENTS_PER_PAGE = 100;
 	private final String DEFAULT_QUERY = "from Cable cable order by cable.cableID asc";
-	private String query = DEFAULT_QUERY;
+	private boolean isTextSearch = false;
+	private String textQuery = "";
 	
 	@FXML
 	TextField searchField;
+	private StringProperty searchProperty = new SimpleStringProperty();
 	
 	@FXML
+	@ActionTrigger("SearchText")
 	Button searchButton;
 	
 	@FXML
@@ -65,9 +69,13 @@ public class TableController {
 	
 	@PostConstruct
 	public void init(){
+		// Initial Table Setup
 		createTableColumns();
 		populateTable();
 		updatePageNum();
+		
+		// Attach strings to their textfields
+        searchField.textProperty().bindBidirectional(searchProperty);
 	}
 	
 	@ActionMethod("NextPage")
@@ -80,6 +88,26 @@ public class TableController {
 	public void onPrevPage(){
 		currPage--;
 		refresh();
+	}
+	
+	@ActionMethod("SearchText")
+	public void onSearchText(){
+		String buffer = searchProperty.get();
+		// Make sure input isn't null or plain whitespace
+		if(buffer != null && !buffer.trim().equals("")){
+			isTextSearch = true;
+			currPage = 0;
+			textQuery = buffer;
+		}else{
+			isTextSearch = false;
+			currPage = 0;
+		}
+		refresh();
+	}
+	
+	private void refresh(){
+		updateTable();
+		updatePageNum();
 	}
 	
 	private void updatePageNum(){
@@ -98,24 +126,18 @@ public class TableController {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void updateTable(){
-		Session session = DataBaseManager.openSession();
-		session.beginTransaction();
+		List<Cable> cables = null;
 		
-		List<Cable> cables = session.createQuery(query).setMaxResults(NUM_ELEMENTS_PER_PAGE)
-													   .setFirstResult(NUM_ELEMENTS_PER_PAGE*currPage)
-													   .list();
-		cables.forEach(Cable::convertText);  // Turns internal Clob obj. to a String
-		tableData.setAll(cables);
-				
-		session.getTransaction().commit();
-		session.close();
-	}
-	
-	private void refresh(){
-		updateTable();
-		updatePageNum();
+		if(isTextSearch){
+			cables = DatabaseManager.searchText(textQuery, NUM_ELEMENTS_PER_PAGE, NUM_ELEMENTS_PER_PAGE*currPage);
+		}else{
+			cables = DatabaseManager.query(DEFAULT_QUERY, NUM_ELEMENTS_PER_PAGE, NUM_ELEMENTS_PER_PAGE*currPage);
+		}
+		
+		if(cables != null){
+			tableData.setAll(cables);
+		}
 	}
 	
 	/*
@@ -147,19 +169,11 @@ public class TableController {
 		stage.show();
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void populateTable(){
-		Session session = DataBaseManager.openSession();
-		session.beginTransaction();
-		
-		List<Cable> cables = session.createQuery(query).setMaxResults(NUM_ELEMENTS_PER_PAGE).list();
-		cables.forEach(Cable::convertText);  // Turns internal Clob obj. to a String
-				
-		tableData = FXCollections.observableList(cables);
+		tableData = FXCollections.observableList(
+				DatabaseManager.query(DEFAULT_QUERY, NUM_ELEMENTS_PER_PAGE, 0)
+				);
 		tablePane.setItems(tableData);
-		
-		session.getTransaction().commit();
-		session.close();
 	}
 	
 	private void createTableColumns(){

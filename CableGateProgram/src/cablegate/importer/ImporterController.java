@@ -36,6 +36,7 @@ public class ImporterController {
 	
 	@FXML
 	TextField directoryField;
+	private StringProperty directoryProperty = new SimpleStringProperty();
 	
 	@FXML
 	@ActionTrigger("importDB")
@@ -50,8 +51,6 @@ public class ImporterController {
 	@FXML
 	ProgressBar importProgressBar;
 	
-	private StringProperty directoryProperty = new SimpleStringProperty();
-
 	private BlockingQueue<Cable> commQueue = new ArrayBlockingQueue<Cable>(200);
 	private CSVReader archiveReader = new CSVReader(commQueue);
 	private DBWriter dbWriter = new DBWriter(commQueue);

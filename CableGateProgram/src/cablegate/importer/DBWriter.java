@@ -19,7 +19,7 @@ import org.hibernate.search.batchindexing.MassIndexerProgressMonitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cablegate.infrastructure.DataBaseManager;
+import cablegate.infrastructure.DatabaseManager;
 import cablegate.models.Cable;
 
 /* Import cables wrapper class for a hibernate worker */
@@ -43,8 +43,9 @@ public class DBWriter extends Task<Void> {
 	 * Initial function call
 	 */
 	@Override public Void call() throws Exception {
-		session = DataBaseManager.openSession();
+		session = DatabaseManager.openSession();
 		
+		// Manually import objects to database using JDBC pluging for speed
 		updateMessage("Importing, this may take a while...");
 		log.info("Importing, this may take a while...");
 		session.doWork(new CableImporter(resultQueue));
@@ -56,6 +57,7 @@ public class DBWriter extends Task<Void> {
 		ftSession.setCacheMode(CacheMode.IGNORE);
 		ftSession.beginTransaction();
 		
+		// Now we need to force the index to be updated since we didn't use the Hibernate API
 		//Scrollable results will avoid loading too many objects in memory
 		ScrollableResults results = ftSession.createCriteria(Cable.class)
 		    .setFetchSize(BATCH_SIZE)
@@ -78,7 +80,7 @@ public class DBWriter extends Task<Void> {
 			}
 		}
 		ftSession.getTransaction().commit();
-		session.close();
+		ftSession.close();
 		return null;
 	}
 	

@@ -12,7 +12,7 @@ import org.datafx.controller.flow.FlowHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cablegate.infrastructure.DataBaseManager;
+import cablegate.infrastructure.DatabaseManager;
 import cablegate.infrastructure.SystemConfig;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
@@ -28,7 +28,7 @@ public class Main extends Application{
 		configureLogger();
 
         // Setup the configurations for Hibernate
-        DataBaseManager.configureHibernateSession();
+        DatabaseManager.configureHibernateSession();
 		 
 		// Setup and display the main stage
 		primaryStage.setTitle("WikiBrow");
@@ -46,7 +46,7 @@ public class Main extends Application{
 	 }  
 	 
 	 public void stop() throws Exception{
-		 DataBaseManager.closeHibernateSession();
+		 DatabaseManager.closeHibernateSession();
 	 }
 	 
 	 private void configureLogger(){

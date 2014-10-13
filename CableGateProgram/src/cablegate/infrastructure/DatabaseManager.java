@@ -1,16 +1,23 @@
 package cablegate.infrastructure;
 
+import java.util.List;
+
 import org.apache.commons.lang3.SystemUtils;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.search.FullTextSession;
+import org.hibernate.search.Search;
+import org.hibernate.search.query.dsl.QueryBuilder;
 import org.hibernate.service.ServiceRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DataBaseManager {
-	private static final Logger log = LoggerFactory.getLogger(DataBaseManager.class);
+import cablegate.models.Cable;
+
+public class DatabaseManager {
+	private static final Logger log = LoggerFactory.getLogger(DatabaseManager.class);
 	
 	private static final String DATABASE_DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
 	private static final String DATABASE_NAME = "DerbyDB";
@@ -106,5 +113,57 @@ public class DataBaseManager {
 	
 	public static String getTableSchemaWithQueryValues() {
 		return TABLE_SCHEMA  + " VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+	}
+	
+	/*
+	 * Searches for the relevant query in the database
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<Cable> query(String query, int amount, int offset){
+		Session session = DatabaseManager.openSession();
+		session.beginTransaction();
+		
+		List<Cable> cables = session.createQuery(query).setMaxResults(amount)
+													   .setFirstResult(offset)
+													   .list();
+		
+		cables.forEach(Cable::convertText);  // Turns internal Clob obj. to a String
+				
+		session.getTransaction().commit();
+		session.close();
+		
+		return cables;
+	}
+	
+	/*
+	 * Does a full text search on all fields in Cable
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<Cable> searchText(String query, int amount, int offset){
+		Session session = DatabaseManager.openSession();
+		FullTextSession ftSession = Search.getFullTextSession(session);
+		
+		// Generate the query parser for Cable object
+		QueryBuilder queryBuilder = ftSession.getSearchFactory()
+											 .buildQueryBuilder()
+											 .forEntity(Cable.class)
+											 .get();
+		
+		// Create the raw lucene search query
+		org.apache.lucene.search.Query luceneQuery = queryBuilder
+														.keyword()
+														.onFields(Cable.getClobHeader())
+														.matching(query)
+														.createQuery();
+		
+		// Wrap the lucene query in a hibernate query and get results
+		List<Cable> cables = ftSession.createFullTextQuery(luceneQuery, Cable.class)
+									  .setMaxResults(amount)
+									  .setFirstResult(offset)
+									  .list();
+		
+		cables.forEach(Cable::convertText);  // Turns internal Clob obj. to a String
+		ftSession.close();
+		return cables;
 	}
 }
