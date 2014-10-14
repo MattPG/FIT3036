@@ -1,0 +1,275 @@
+"Consulate Peshawar",33.994988,71.49226,176
+"** Dhahran",26.266667,50.15,1
+"REO Kirkuk",35.466667,44.316667,138
+"Embassy Ndjamena",12.116139,15.030849,948
+"Embassy Minsk",53.900192,27.561951,1014
+"USEU Brussels",50.849161,4.354015,1000
+"Secretary of State",38.336472,-81.612024,8017
+"Mission USOSCE",48.241143,16.346665,302
+"Consulate Matamoros",25.888947,-97.499223,7
+"Embassy Bridgetown",13.093602,-59.58596,1204
+"Embassy Ashgabat",37.953495,58.361135,2439
+"Consulate Nuevo Laredo",27.467801,-99.511472,5
+"Consulate Montreal",45.504115,-73.572385,82
+"Embassy Koror",7.341063,134.47716,7
+"Embassy Tirana",41.33035,19.807704,452
+"Embassy Madrid",28.24895,-82.690852,3620
+"Embassy Suva",-18.144301,178.424341,393
+"Embassy Tegucigalpa",14.103073,-87.189956,1958
+"Embassy Tokyo",35.668725,139.743347,5697
+"Embassy Rome",41.907604,12.465969,2890
+"Embassy Athens",37.973086,23.742117,1313
+"Consulate Recife",-8.047546,-34.876962,13
+"Embassy Port Louis",-20.166567,57.50073,195
+"Embassy Bishkek",42.867377,74.602832,973
+"Embassy Stockholm",59.37022,18.192996,671
+"Embassy Kinshasa",-4.320803,15.273243,2551
+"US Office Almaty",43.233635,76.954207,477
+"Embassy Helsinki",60.166077,24.950824,601
+"Embassy Manila",14.577187,120.977653,1796
+"Embassy Djibouti",38.905372,-77.034981,903
+"Embassy Vilnius",54.696613,25.252467,956
+"Embassy Nicosia",35.159107,33.35282,849
+"Consulate Perth",-32.056047,115.743014,11
+"Consulate Shenyang",41.784949,123.425925,120
+"Embassy Bangui",4.364202,18.590458,102
+"Embassy Bamako",12.63611,-7.994201,399
+"Mission USNATO",50.83637,4.540473,799
+"Embassy Niamey",13.52462,2.078117,490
+"Embassy Ankara",39.883818,32.87299,7918
+"Consulate Leipzig",51.339696,12.373075,8
+"Consulate Curacao",12.20189,-68.262382,19
+"Embassy The Hague",52.101938,4.29996,3021
+"Embassy Berlin",52.51541,13.411993,1719
+"Consulate St Petersburg",27.787311,-82.663787,48
+"Consulate Strasbourg",-11.709883,43.2467,22
+"Embassy Libreville",0.383907,9.446585,232
+"Consulate Vladivostok",43.133333,131.9,100
+"Consulate Kaduna",10.537185,7.448414,9
+"Embassy Lome",6.126711,1.219123,112
+"UNVIE",0,0,560
+"Embassy Ulaanbaatar",47.914293,106.923814,432
+"Embassy Manama",26.23998,50.590099,1645
+"Consulate Chiang Mai",18.779241,98.951797,278
+"Consulate Calgary",51.132915,-114.148748,14
+"Embassy Oslo",59.920807,10.695373,763
+"Embassy Sofia",42.683484,23.288312,978
+"Consulate Izmir",38.429571,27.134693,5
+"Embassy Budapest",47.486728,19.040595,734
+"Embassy Cotonou",6.351079,2.388341,327
+"Embassy Vienna",38.853669,-77.288837,1722
+"Embassy Antananarivo",-18.907273,47.531534,535
+"Embassy Malabo",3.751254,8.754915,13
+"REO Hillah",0,0,275
+"Iran RPO Dubai",25.233113,55.379735,302
+"Consulate Ponta Delgada",37.742242,-25.67495,1
+"Embassy Georgetown",38.904834,-77.062477,395
+"Consulate Monterrey",29.078505,-110.958953,159
+"Consulate Auckland",-36.863776,174.747469,14
+"Consulate Krakow",50.06465,19.94498,2
+"Consulate Guangzhou",23.129163,113.264435,662
+"US OFFICE FSC CHARLESTON",32.776475,-79.931051,1
+"Embassy Baghdad",33.298549,44.395746,6677
+"Embassy Belgrade",44.80335,20.459825,994
+"Consulate Mumbai",18.936564,72.832371,199
+"Embassy Dublin",53.333256,-6.250641,910
+"Embassy Kabul",34.538312,69.14061,2961
+"REO Basrah",0,0,373
+"Embassy Bangkok",13.740926,100.554501,2941
+"Embassy Prague",53.246791,-6.5977,1271
+"UN Rome",26.409347,-98.971,55
+"Embassy Kyiv",50.446072,30.511056,1139
+"Embassy Doha",25.34295,51.516454,640
+"Embassy Nouakchott",18.095102,-15.983942,498
+"Consulate Fukuoka",33.590355,130.401716,13
+"Embassy Dili",-8.553758,125.579864,390
+"Embassy Tashkent",41.305901,69.285798,1296
+"Consulate Milan",45.475097,9.194112,38
+"Embassy Majuro",7.116421,171.185774,9
+"Embassy Tehran",35.760643,51.39591,13
+"Consulate Tijuana",32.508124,-116.999931,27
+"Embassy Singapore",38.94269,-77.065479,704
+"Consulate Hermosillo",29.078505,-110.958953,19
+"Embasy Bonn",50.735479,7.100923,1
+"Embassy Damascus",28.32331,-82.703942,1419
+"Embassy Cairo",30.092308,31.333823,2752
+"Consulate Naha",26.212312,127.679157,39
+"Embassy Astana",51.147396,71.424151,1394
+"US Delegation FEST TWO",0,0,9
+"Embassy Nassau",40.793921,-73.731494,394
+"Consulate Florence",-27.45588,153.049609,10
+"Embassy Brussels",50.844119,4.368821,1136
+"US Mission Geneva",46.232725,6.137363,529
+"Embassy Amman",31.944793,35.899056,4312
+"Consulate Naples",26.142036,-81.79481,19
+"Embassy Pristina",42.661995,21.150551,668
+"Embassy Grenada",-25.74512,28.19156,119
+"Consulate Lagos",6.578518,3.349704,1487
+"Consulate Surabaya",-7.236936,112.74045,167
+"Consulate Karachi",24.841193,67.009598,113
+"Consulate Thessaloniki",40.63435,22.947609,72
+"Embassy Belmopan",17.255991,-88.768629,231
+"Consulate Shanghai",31.201436,121.453342,555
+"Embassy Asmara",15.338223,38.93578,564
+"Consulate Ho Chi Minh City",10.779368,106.704577,777
+"Embassy Port Au Prince",18.564096,-72.249333,1214
+"Embassy Dushanbe",38.581285,68.749716,990
+"Embassy Abidjan",5.323528,-4.014906,549
+"Consulate Jeddah",21.547444,39.169417,382
+"Mission Geneva",46.232725,6.137363,432
+"Consulate Johannesburg",-26.111557,28.051674,39
+"Embassy Yerevan",40.202162,44.510422,1735
+"Embassy Hanoi",21.024436,105.851641,2325
+"Consulate Toronto",43.666375,-79.367207,145
+"Consulate Cape Town",-33.928116,18.414395,81
+"Embassy Khartoum",15.583993,32.543223,3078
+"Embassy Tallinn",59.4283,24.7357,610
+"Embassy Bratislava",48.141284,17.107972,1172
+"Embassy Chisinau",47.016456,28.826788,425
+"Consulate Ciudad Juarez",16.860263,-99.874517,10
+"Embassy Lusaka",-15.420023,28.304467,295
+"Embassy Zagreb",45.809549,15.977393,1686
+"Embassy Santiago",-33.414003,-70.597141,1464
+"Embassy Gaborone",-24.661482,25.90943,274
+"Embassy Harare",-17.797007,31.050898,2998
+"Consulate Melbourne",-37.838183,144.974514,75
+"Consulate Nagoya",35.181446,136.906398,4
+"Embassy Reykjavik",64.148231,-21.9468,290
+"Consulate Sapporo",43.062096,141.354376,5
+"Embassy Tel Aviv",32.074473,34.782415,3194
+"Embassy Accra",5.567035,-0.185844,862
+"Embassy Tripoli",32.869387,13.132074,598
+"Embassy Luxembourg",38.91132,-77.049166,168
+"REO Mosul",36.34,43.13,51
+"Consulate Alexandria",38.76809,-77.133404,17
+"Embassy Beirut",33.855876,35.489346,2368
+"Embassy Yaounde",3.850135,11.512269,337
+"Embassy Bujumbura",-3.380978,29.370605,176
+"Consulate Marseille",43.296482,5.36978,5
+"Embassy Sarajevo",43.857324,18.400199,869
+"Embassy Paramaribo",5.831586,-55.17496,554
+"Embassy Dar Es Salaam",-6.789202,39.27861,665
+"Embassy Rangoon",16.876166,96.113881,1864
+"Embassy Nairobi",-1.251711,36.81888,1821
+"Consulate Osaka Kobe",34.690083,135.195511,40
+"Consulate Jerusalem",31.747612,35.22462,2217
+"Consulate Barcelona",41.394152,2.151296,31
+"Embassy Monrovia",6.314927,-10.809846,315
+"Consulate Sydney",-33.867079,151.208637,12
+"Embassy Rabat",33.985672,-6.828357,1365
+"Embassy Lilongwe",-13.951592,33.77635,715
+"Mission UNESCO",48.850756,2.306197,93
+"Consulate Chennai",13.023657,80.243083,305
+"Embassy Banjul",13.461992,-16.686886,256
+"Consulate Istanbul",40.96979,28.799882,752
+"Embassy Ottawa",45.409506,-75.636928,1948
+"Embassy Maputo",-25.960514,32.601816,970
+"Consulate Halifax",44.64735,-63.575083,136
+"Embassy Phnom Penh",11.583421,104.915159,777
+"US Interests Section Havana",23.145844,-82.38807,507
+"Embassy Tbilisi",41.727542,44.725616,1167
+"Consulate Quebec",46.810568,-71.204846,52
+"Embassy Paris",-6.895277,107.604548,3775
+"Embassy Vientiane",17.96156,102.613189,285
+"Embassy London",51.510426,-0.140885,1083
+"Consulate Dusseldorf",51.218356,6.795462,73
+"Embassy Muscat",23.602915,58.448245,1644
+"Embassy Addis Ababa",8.999037,38.782117,1395
+"Consulate Belfast",54.570639,-5.942424,15
+"Consulate Lahore",31.508363,74.336033,104
+"Embassy Pretoria",-25.766668,28.233501,1566
+"Embassy Vatican",41.305561,69.296029,729
+"Embassy Mbabane",-26.316667,31.133333,89
+"Consulate Chengdu",30.572269,104.066541,260
+"Embassy Riga",56.952285,24.113265,632
+"Embassy Mexico",38.90063,-77.043956,2285
+"Embassy Kathmandu",27.741049,85.336615,2278
+"Embassy Lisbon",38.702162,-9.218118,722
+"Consulate Merida",20.974934,-89.624271,3
+"US Delegation, Secretary",0,0,51
+"Embassy Warsaw",52.218521,21.03982,970
+"Embassy Bandar Seri Begawan",4.887639,114.942733,256
+"Embassy Caracas",10.490402,-66.861066,2340
+"Embassy Bogota",4.639644,-74.079847,2416
+"Embassy Skopje",41.979464,21.425979,522
+"Consulate Nogales",31.288459,-110.939953,78
+"Embassy Apia",-13.832625,-171.765671,9
+"Consulate Hamilton",35.036215,-85.108031,27
+"Embassy Guatemala",38.912447,-77.049547,1261
+"Embassy Canberra",-35.301078,149.09591,933
+"Consulate Rio De Janeiro",-22.951842,-43.195572,121
+"Embassy Valletta",35.897878,14.49716,101
+"Embassy Kuala Lumpur",3.16068,101.72239,994
+"Embassy San Jose",28.200953,-82.699396,764
+"Embassy Kolonia",6.957757,158.216354,75
+"Consulate Sao Paulo",-23.531309,-46.546679,786
+"Embassy Brasilia",-3.107048,-60.017814,1947
+"Embassy Copenhagen",55.724385,12.571767,297
+"Embassy Mogadishu",2.042445,45.347443,27
+"Embassy Islamabad",33.726207,73.106465,2220
+"Embassy Panama",8.985298,-79.523415,912
+"US Mission CD Geneva",46.198392,6.142296,19
+"Embassy Freetown",8.460991,-13.261492,480
+"Embassy Jakarta",-6.154091,106.817467,3059
+"Embassy Ouagadougou",12.304737,-1.496964,181
+"Department of State",38.89465,-77.048942,1
+"Embassy New Delhi",28.598599,77.18498,3038
+"Consulate Guayaquil",-2.191302,-79.939678,36
+"Embassy Riyadh",24.689364,46.629961,1245
+"Embassy Colombo",6.914691,79.872425,3325
+"Embassy Baku",40.33841,49.810713,1569
+"Consulate Dubai",25.255031,55.307837,237
+"American Institute Taiwan, Taipei",25.032434,121.539549,3456
+"Consulate Dhahran",26.306777,50.156941,34
+"Embassy Tunis",28.260813,-82.70677,1055
+"Embassy Sanaa",15.304515,44.181819,1591
+"Embassy Kigali",-1.94871,30.066748,651
+"Embassy Kampala",0.31375,32.587774,417
+"Embassy Quito",-0.209056,-78.494899,1450
+"USMISSION USTR GENEVA",46.198392,6.142296,1
+"Embassy Dakar",14.668375,-17.427667,681
+"Consulate Amsterdam",52.355443,4.862995,18
+"Consulate Adana",37,35.321333,887
+"Embassy Praia",14.907112,-23.513328,49
+"Consulate Guadalajara",20.6734,-103.367026,32
+"Embassy Bern",46.943775,7.437963,255
+"Embassy Windhoek",-22.554921,17.08447,141
+"Consulate Yekaterinburg",56.833333,60.583333,34
+"Embassy Algiers",36.737134,3.032753,806
+"Embassy Abu Dhabi",24.447296,54.366317,2547
+"Consulate Casablanca",33.589714,-7.61803,232
+"Embassy Managua",12.139453,-86.279473,1264
+"Embassy Luanda",-8.816069,13.236211,315
+"Consulate Hong Kong",22.278648,114.165416,950
+"Consulate Munich",48.145125,11.583789,108
+"USUN New York",40.712784,-74.005941,3116
+"Embassy Beijing",39.942504,116.445161,3297
+"Embassy Seoul",35.760643,51.39591,1980
+"Consulate Vancouver",49.287474,-123.119739,44
+"Consulate Frankfurt",50.094905,8.668098,297
+"Embassy Moscow",55.758123,37.589805,3376
+"Embassy Asuncion",-25.298171,-57.572733,1148
+"Consulate Durban",-29.85884,31.02343,56
+"Embassy Santo Domingo",18.510132,-69.964321,1675
+"Embassy Conakry",9.511705,-13.715251,847
+"Embassy Podgorica",42.443269,19.274546,164
+"Embassy Port Of Spain",10.661799,-61.514965,391
+"Embassy Brazzaville",-4.274967,15.282197,70
+"Embassy Bucharest",44.443664,26.100221,830
+"American Consulate Hyderabad",17.440355,78.474612,10
+"Embassy Ljubljana",46.04595,14.501452,836
+"Embassy Lima",-12.128484,-77.026665,1388
+"DIR FSINFATC",0,0,1
+"Embassy Kuwait",-25.74798,28.22414,3717
+"Embassy Wellington",-41.294277,174.784066,1490
+"Embassy Montevideo",-34.920607,-56.162356,445
+"Embassy Buenos Aires",9.017614,-79.533682,2233
+"Embassy Maseru",-29.307133,27.466051,607
+"Embassy La Paz",9.011544,-79.521501,1299
+"Embassy Dhaka",23.80396,90.419424,1984
+"Embassy Kingston",28.306364,-82.699794,1138
+"Embassy Port Moresby",-9.477519,147.150696,66
+"Consulate Kolkata",22.571677,88.347394,364
+"Embassy San Salvador",13.719341,-89.241875,1119
+"Embassy Abuja",9.078751,7.484402,3025
+"Consulate Hamburg",53.561944,9.996667,52

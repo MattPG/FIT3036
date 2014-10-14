@@ -22,9 +22,9 @@
                         <Button fx:id="searchButton" mnemonicParsing="false" text="Search" />
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="264.0">
+                  <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="250.0">
                      <HBox.margin>
-                        <Insets right="15.0" />
+                        <Insets />
                      </HBox.margin>
                   </HBox>
                </children>

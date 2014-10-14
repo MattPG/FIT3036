@@ -129,7 +129,6 @@ public class DatabaseManager {
 				
 		session.getTransaction().commit();
 		session.close();
-		
 		return cables;
 	}
 	
@@ -140,6 +139,7 @@ public class DatabaseManager {
 	public static List<Cable> searchText(String query, int amount, int offset){
 		Session session = DatabaseManager.openSession();
 		FullTextSession ftSession = Search.getFullTextSession(session);
+		ftSession.beginTransaction();
 		
 		// Generate the query parser for Cable object
 		QueryBuilder queryBuilder = ftSession.getSearchFactory()
@@ -160,6 +160,7 @@ public class DatabaseManager {
 									  .setFirstResult(offset)
 									  .list();
 		
+		ftSession.getTransaction().commit();
 		ftSession.close();
 		return cables;
 	}
