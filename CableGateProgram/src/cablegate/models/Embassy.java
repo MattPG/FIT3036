@@ -1,9 +1,15 @@
 package cablegate.models;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cablegate.map.MapController;
+
 import com.lynden.gmapsfx.javascript.object.LatLong;
 
 public class Embassy implements Comparable<Embassy>{
-	
+	private static final Logger log = LoggerFactory.getLogger(Embassy.class);
+
 	private String name;
 	private LatLong location;
 	private int cableCount;
@@ -44,6 +50,22 @@ public class Embassy implements Comparable<Embassy>{
 
 	public void setCableCount(int cableCount) {
 		this.cableCount = cableCount;
+	}
+	
+	public static Embassy parse(String input){
+		String[] output = new String[4];
+		
+		// Get the name
+		String[] buff = input.split("\"");
+		output[0] = buff[1];
+		
+		// Get the remaining values
+		buff = buff[2].split(",");
+		output[1] = buff[0];
+		output[2] = buff[1];
+		output[3] = buff[2];
+		
+		return new Embassy(output[0], output[1], output[2], output[3]);
 	}
 
 	@Override

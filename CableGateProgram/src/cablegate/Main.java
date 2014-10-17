@@ -1,10 +1,5 @@
 package cablegate;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.PrintWriter;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -22,6 +17,8 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.joran.spi.JoranException;
 import ch.qos.logback.core.util.StatusPrinter;
+
+import com.lynden.gmapsfx.javascript.object.LatLong;
 
 public class Main extends Application{ 
 	private static final Logger log = LoggerFactory.getLogger(Main.class);

@@ -10,9 +10,12 @@ import java.util.TreeSet;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.datafx.controller.FXMLController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,8 +43,6 @@ public class MapController implements MapComponentInitializedListener {
 	@PostConstruct
 	public void init(){
 		mapView.addMapInializedListener(this);
-		// TODO: Run on background thread
-//		generateEmbassies();
 	}
 	
 	@Override
@@ -61,12 +62,21 @@ public class MapController implements MapComponentInitializedListener {
                 .mapType(MapTypeIdEnum.ROADMAP);
         
 		map = mapView.createMap(options);
+		
+
+		generateEmbassies();
 	}
 	
 	private void generateEmbassies(){
 		// Open Embassies data file
-		// TODO: Change this to generic location!
-        File file = new File("D:\\Users\\Matthew\\git\\FIT3036\\CableGateProgram\\src\\Embassies.txt");
+		String directory = SystemUtils.getUserDir().getAbsolutePath();
+		if(SystemUtils.IS_OS_WINDOWS){
+			directory += "\\src\\Embassies.txt";
+		}else{
+			directory += "/src/Embassies.txt";
+		}
+        File file = new File(directory);
+        
         BufferedReader reader = null;
         try {
 			reader = new BufferedReader(new FileReader(file));
@@ -79,23 +89,27 @@ public class MapController implements MapComponentInitializedListener {
 		Set<Embassy> tempSet = new TreeSet<Embassy>();
         try {
 			String currLine = reader.readLine();
-			String[] elements, name;
-			Embassy embassy;
 			while(currLine != null){
-				elements = currLine.split(",");
-				name = elements[0].split("\"");
-				
-				embassy = new Embassy(name[0], elements[1], elements[2], elements[3]);
-				tempSet.add(embassy);
-				log.debug("Added {} to Set", embassy);
-				
+				tempSet.add(Embassy.parse(currLine));
 				currLine = reader.readLine();
 			}
 		} catch (IOException e) {
 			log.error("Failed to read Embassies.txt", e);
+        	try {
+				reader.close();
+			} catch (IOException c) {
+				log.error("Failed to close Embassies.txt reader",c);
+			}
 			Platform.exit();
 		}
+        
+        try {
+			reader.close();
+		} catch (IOException e1) {
+			log.error("Failed to close Embassies.txt reader",e1);
+		}
         embassies = tempSet;
+        embassies.forEach(e -> log.info("",e));
 	}
 
 }
