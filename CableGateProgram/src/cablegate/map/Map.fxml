@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 <?import com.lynden.gmapsfx.*?>
 
-
 <StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox>
          <children>
-            <HBox />
-       		<GoogleMapView fx:id="mapView"/>
+            <HBox>
+               <children>
+                  <Button fx:id="refreshButton" mnemonicParsing="false" text="Refresh">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" top="5.0" />
+                     </HBox.margin>
+                  </Button>
+               </children></HBox>
+       		<GoogleMapView fx:id="mapView" />
          </children>
       </VBox>
    </children>

@@ -53,7 +53,7 @@ public class TableController {
 	
 	@FXML
 	TableView<Cable> tablePane;	
-	private ObservableList<Cable> tableData;
+	public static ObservableList<Cable> tableData;
 
 	@FXML
 	@ActionTrigger("NextPage")
