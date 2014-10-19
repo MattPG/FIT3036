@@ -20,7 +20,7 @@
                            </HBox.margin>
                         </TextField>
                         <Button fx:id="searchButton" mnemonicParsing="false" text="Search" />
-                        <DatePicker>
+                        <DatePicker fx:id="datePicker">
                            <HBox.margin>
                               <Insets left="50.0" />
                            </HBox.margin>

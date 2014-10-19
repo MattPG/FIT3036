@@ -6,28 +6,23 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-import org.apache.commons.lang3.SystemUtils;
 import org.datafx.controller.flow.Flow;
 import org.datafx.controller.flow.FlowHandler;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cablegate.infrastructure.DatabaseManager;
+import cablegate.infrastructure.SystemConfig;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.joran.spi.JoranException;
 import ch.qos.logback.core.util.StatusPrinter;
 
-import com.lynden.gmapsfx.javascript.object.LatLong;
-
 public class Main extends Application{ 
-	private static final Logger log = LoggerFactory.getLogger(Main.class);
-
 	 @Override  
 	 public void start(Stage primaryStage) throws Exception {
 		// Setup the Logger configurations
 		configureLogger();
-
+		 
         // Setup the configurations for Hibernate
         DatabaseManager.configureHibernateSession();
 		 
@@ -115,15 +110,7 @@ public class Main extends Application{
 				  JoranConfigurator configurator = new JoranConfigurator();
 				  configurator.setContext(context);
 				  context.reset();
-				  
-				  String systemLogFilePath = null;
-				  if(SystemUtils.IS_OS_WINDOWS){
-					  systemLogFilePath = SystemUtils.getUserDir() + "\\src\\cablegate\\infrastructure\\logback.xml";
-				  }else {
-					  systemLogFilePath = SystemUtils.getUserDir() + "/src/cablegate/infrastructure/logback.xml";
-				  }
-				  
-				  configurator.doConfigure(systemLogFilePath); // loads logback file
+				  configurator.doConfigure(SystemConfig.getWorkingDirectory() + "logback.xml"); // loads logback config file
 				} catch (JoranException je) {
 				  // StatusPrinter will handle this
 				} catch (Exception ex) {

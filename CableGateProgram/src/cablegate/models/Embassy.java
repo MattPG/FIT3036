@@ -1,13 +1,8 @@
 package cablegate.models;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.lynden.gmapsfx.javascript.object.LatLong;
 
 public class Embassy implements Comparable<Embassy>{
-	private static final Logger log = LoggerFactory.getLogger(Embassy.class);
-
 	private String name;
 	private double latitude;
 	private double longitude;

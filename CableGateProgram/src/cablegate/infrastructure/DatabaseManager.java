@@ -2,7 +2,8 @@ package cablegate.infrastructure;
 
 import java.util.List;
 
-import org.apache.commons.lang3.SystemUtils;
+import org.apache.lucene.search.Sort;
+import org.apache.lucene.search.SortField;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -11,14 +12,10 @@ import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.hibernate.service.ServiceRegistry;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import cablegate.models.Cable;
 
 public class DatabaseManager {
-	private static final Logger log = LoggerFactory.getLogger(DatabaseManager.class);
-	
 	private static final String DATABASE_DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
 	private static final String DATABASE_NAME = "DerbyDB";
 	private static final String DATABASE_PROTOCOL = "jdbc:derby:";
@@ -84,23 +81,11 @@ public class DatabaseManager {
 	}
 	
 	public static String getDatabaseURL(){
-		String systemDatabaseLocation = getDatabaseProtocol() + SystemUtils.getUserDir().getAbsolutePath();
-		if(SystemUtils.IS_OS_WINDOWS){
-			systemDatabaseLocation += ('\\' + DATABASE_NAME + ";create=true");
-		}else {
-			systemDatabaseLocation += ('/' + DATABASE_NAME + ";create=true");
-		}
-		return systemDatabaseLocation;
+		return getDatabaseProtocol() + SystemConfig.getWorkingDirectory() + DATABASE_NAME + ";create=true";
 	}
 	
 	public static String getLuceneURL(){
-		String systemLuceneLocation = SystemUtils.getUserDir().getAbsolutePath();
-		if(SystemUtils.IS_OS_WINDOWS){
-			systemLuceneLocation += '\\';
-		}else {
-			systemLuceneLocation += '/';
-		}
-		return systemLuceneLocation + LUCENE_NAME;
+		return SystemConfig.getWorkingDirectory() + LUCENE_NAME;
 	}
 	
 	public static String getTableSchemaCreate() {
@@ -136,7 +121,7 @@ public class DatabaseManager {
 	 * Does a full text search on all fields in Cable
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<Cable> searchText(String query, int amount, int offset){
+	public static List<Cable> searchText(String query, int amount, int offset, String... fields){
 		Session session = DatabaseManager.openSession();
 		FullTextSession ftSession = Search.getFullTextSession(session);
 		ftSession.beginTransaction();
@@ -150,7 +135,7 @@ public class DatabaseManager {
 		// Create the raw lucene search query
 		org.apache.lucene.search.Query luceneQuery = queryBuilder
 														.keyword()
-														.onFields(Cable.HEADER_ARRAY)
+														.onFields(fields)
 														.matching(query)
 														.createQuery();
 		
@@ -158,6 +143,41 @@ public class DatabaseManager {
 		List<Cable> cables = ftSession.createFullTextQuery(luceneQuery, Cable.class)
 									  .setMaxResults(amount)
 									  .setFirstResult(offset)
+									  .list();
+		
+		ftSession.getTransaction().commit();
+		ftSession.close();
+		return cables;
+	}
+	
+	/*
+	 * Does a full text search on all fields in Cable
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<Cable> searchTextExact(String query, int amount, int offset, String field){
+		Session session = DatabaseManager.openSession();
+		FullTextSession ftSession = Search.getFullTextSession(session);
+		ftSession.beginTransaction();
+		
+		// Generate the query parser for Cable object
+		QueryBuilder queryBuilder = ftSession.getSearchFactory()
+											 .buildQueryBuilder()
+											 .forEntity(Cable.class)
+											 .get();
+		
+		// Create the raw lucene search query
+		org.apache.lucene.search.Query luceneQuery = queryBuilder
+														.phrase()
+														.onField(field)
+														.sentence(query)
+														.createQuery();
+		
+		// Wrap the lucene query in a hibernate query and get results
+		Sort sort = new Sort(new SortField("cableID", SortField.STRING));
+		List<Cable> cables = ftSession.createFullTextQuery(luceneQuery, Cable.class)
+									  .setMaxResults(amount)
+									  .setFirstResult(offset)
+									  .setSort(sort)
 									  .list();
 		
 		ftSession.getTransaction().commit();

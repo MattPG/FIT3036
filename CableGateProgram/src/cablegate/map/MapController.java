@@ -16,13 +16,13 @@ import javafx.scene.control.Button;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.lang3.SystemUtils;
 import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.ActionMethod;
 import org.datafx.controller.flow.action.ActionTrigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cablegate.infrastructure.SystemConfig;
 import cablegate.models.Embassy;
 import cablegate.table.TableController;
 
@@ -112,14 +112,8 @@ public class MapController implements MapComponentInitializedListener {
 	
 	private void generateEmbassies(){
 		// Open Embassies data file
-		String directory = SystemUtils.getUserDir().getAbsolutePath();
-		if(SystemUtils.IS_OS_WINDOWS){
-			directory += "\\src\\Embassies.txt";
-		}else{
-			directory += "/src/Embassies.txt";
-		}
-        File file = new File(directory);
-        
+		String directory = SystemConfig.getWorkingDirectory() + "Embassies.txt";
+        File file = new File(directory);      
         BufferedReader reader = null;
         try {
 			reader = new BufferedReader(new FileReader(file));
