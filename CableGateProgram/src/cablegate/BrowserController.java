@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import cablegate.map.MapController;
 import cablegate.table.TableController;
+import cablegate.tagcloud.TagCloudController;
 
 @FXMLController(value="Browser.fxml")
 public class BrowserController {
@@ -25,12 +26,13 @@ public class BrowserController {
 	public void init() {
 		Flow tableFlow = new Flow(TableController.class);
 		Flow mapFlow = new Flow(MapController.class);
-		
+		Flow tagFlow = new Flow(TagCloudController.class);
 		try {
 			tabPane.getTabs().addAll(tableFlow.startInTab(),
-									mapFlow.startInTab());
+									mapFlow.startInTab(),
+									tagFlow.startInTab());
 		} catch (FlowException e) {
-			log.error("failed to add tableFlow to browser", e);
+			log.error("error adding flows to browser controller", e);
 		}
     }
 }

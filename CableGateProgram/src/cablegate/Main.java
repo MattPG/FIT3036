@@ -1,17 +1,38 @@
 package cablegate;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.SortedTermVectorMapper;
+import org.apache.lucene.index.TermVectorEntry;
 import org.datafx.controller.flow.Flow;
 import org.datafx.controller.flow.FlowHandler;
+import org.hibernate.search.FullTextSession;
+import org.hibernate.search.Search;
+import org.hibernate.search.SearchFactory;
+import org.mcavallo.opencloud.Cloud;
+import org.mcavallo.opencloud.Cloud.Case;
+import org.mcavallo.opencloud.Tag;
 import org.slf4j.LoggerFactory;
 
 import cablegate.infrastructure.DatabaseManager;
 import cablegate.infrastructure.SystemConfig;
+import cablegate.models.Cable;
+import cablegate.table.TableController;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.joran.spi.JoranException;
@@ -33,67 +54,8 @@ public class Main extends Application{
 		StackPane mainPane = flowHandler.start();
 		
         primaryStage.setScene(new Scene(mainPane, 800, 500));
-        primaryStage.setOnCloseRequest(e -> Platform.exit());
+        primaryStage.setOnCloseRequest(event -> Platform.exit());
         primaryStage.show();
-        
-        // Generate a list of the embassies
-//        FullTextSession ftSession = Search.getFullTextSession(
-//        								DatabaseManager.openSession());
-//        SearchFactory searchFactory = ftSession.getSearchFactory();
-//        IndexReader indexReader = searchFactory.getIndexReaderAccessor()
-//        									.open(Cable.class);
-//        LuceneDictionary dictionary = new LuceneDictionary(indexReader, "sender");
-//        BytesRefIterator iterator = dictionary.getWordsIterator();
-//        BytesRef byteRef = null;
-//        while( (byteRef = iterator.next()) != null ){
-//        	System.out.println(byteRef.utf8ToString());
-//        }
-//        
-//        searchFactory.getIndexReaderAccessor().close(indexReader);
-//        ftSession.close();
-        
-//        final String DEFAULT_QUERY = "from Cable cable order by cable.cableID asc";
-//        final int NUM_ELEMENTS_PER_PAGE = 10000;
-//        List<Cable> cables;
-//        Map<String, Integer> wordMap = new HashMap<String, Integer>();
-//        for(int currPage=0; currPage <= 26; currPage++){
-//        	cables = DatabaseManager.query(DEFAULT_QUERY, NUM_ELEMENTS_PER_PAGE, NUM_ELEMENTS_PER_PAGE*currPage);
-//        	cables.forEach(e -> {
-//        		String sender = e.getSender();
-//                Integer freq = wordMap.get(sender);
-//                
-//                if(freq == null)
-//                	wordMap.put(sender, new Integer(1));
-//                else
-//                	wordMap.put(sender, new Integer(freq.intValue() + 1));
-//        	});
-//        }
-//        
-//        wordMap.forEach((s,i) -> System.out.println(s + " " + i));
-        
-//        File text = new File("D:\\Users\\Matthew\\git\\FIT3036\\CableGateProgram\\src\\embassies.txt");
-//        File embs = new File("D:\\Users\\Matthew\\git\\FIT3036\\CableGateProgram\\src\\rawEmbassies.txt");
-//        File Embs = new File("D:\\Users\\Matthew\\git\\FIT3036\\CableGateProgram\\src\\sfEmbassies.txt");
-//        BufferedReader brText = new BufferedReader(new FileReader(text));
-//        BufferedReader brEmbs = new BufferedReader(new FileReader(embs));
-//        PrintWriter fwEmbs = new PrintWriter(Embs);
-//        String[] wordsText;
-//        String currLineText = brText.readLine();
-//        String currLineEmbs = brEmbs.readLine();
-//        
-//        while(currLineText != null){
-//        	wordsText = currLineText.split(" ");
-//        	currLineEmbs += "," + wordsText[wordsText.length-1];
-//        	fwEmbs.println(currLineEmbs);
-//        	System.out.println(currLineEmbs);
-//        	currLineText = brText.readLine();
-//            currLineEmbs = brEmbs.readLine();
-//        }
-//        
-//        brText.close();
-//        brEmbs.close();
-//        fwEmbs.close();
-        
 	 }  
 	 
 	 public static void main(String[] args) {  
