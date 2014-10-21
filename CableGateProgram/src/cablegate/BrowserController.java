@@ -11,6 +11,7 @@ import org.datafx.controller.flow.FlowException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cablegate.charts.ChartsController;
 import cablegate.map.MapController;
 import cablegate.table.TableController;
 import cablegate.tagcloud.TagCloudController;
@@ -27,10 +28,13 @@ public class BrowserController {
 		Flow tableFlow = new Flow(TableController.class);
 		Flow mapFlow = new Flow(MapController.class);
 		Flow tagFlow = new Flow(TagCloudController.class);
+		Flow chartsFlow = new Flow(ChartsController.class);
 		try {
 			tabPane.getTabs().addAll(tableFlow.startInTab(),
 									mapFlow.startInTab(),
-									tagFlow.startInTab());
+									tagFlow.startInTab(),
+									chartsFlow.startInTab()
+									);
 		} catch (FlowException e) {
 			log.error("error adding flows to browser controller", e);
 		}

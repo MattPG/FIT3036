@@ -25,7 +25,10 @@ public class Main extends Application{
 		 
         // Setup the configurations for Hibernate
         DatabaseManager.configureHibernateSession();
-		 
+        
+        // Get initial retrieval of stop words
+		SystemConfig.getStopWords();
+		
 		// Setup and display the main stage
 		primaryStage.setTitle("WikiBrow");
 		Flow flow = new Flow(RootController.class);

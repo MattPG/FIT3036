@@ -18,6 +18,7 @@ public class SystemConfig {
 	private static String archiveDirectory = null;
 	private static long javaRam = Runtime.getRuntime().maxMemory() / 1024L / 1024L;
 	private static final String WORKING_FOLDER = "CableGateFiles";
+	private static Set<String> stopWords = null;
 	
 	public static String getArchiveDirectory() {
 		return archiveDirectory;
@@ -32,26 +33,27 @@ public class SystemConfig {
 	}
 	
 	public static Set<String> getStopWords(){
-		Set<String> stopWords = null;
-		BufferedReader reader = null;
-		try {
-			reader = new BufferedReader(new FileReader(new File(getWorkingDirectory() + "stopwords.txt")));
-			stopWords = new TreeSet<String>();
-			String word = reader.readLine();
-			while(word != null){
-				stopWords.add(word);
-				word = reader.readLine();
-			}
-		} catch (FileNotFoundException e) {
-			log.error("Error while trying to open custom stopwords.txt", e);
-		} catch (IOException e) {
-			log.error("Error while trying to read custom stopwords.txt", e);
-		}finally{
-			if(reader != null){
-				try {
-					reader.close();
-				} catch (IOException e) {
-					log.error("Error trying to close reader.", e);
+		if(stopWords == null){
+			BufferedReader reader = null;
+			try {
+				reader = new BufferedReader(new FileReader(new File(getWorkingDirectory() + "stopwords.txt")));
+				stopWords = new TreeSet<String>();
+				String word = reader.readLine();
+				while(word != null){
+					stopWords.add(word);
+					word = reader.readLine();
+				}
+			} catch (FileNotFoundException e) {
+				log.error("Error while trying to open custom stopwords.txt", e);
+			} catch (IOException e) {
+				log.error("Error while trying to read custom stopwords.txt", e);
+			}finally{
+				if(reader != null){
+					try {
+						reader.close();
+					} catch (IOException e) {
+						log.error("Error trying to close reader.", e);
+					}
 				}
 			}
 		}

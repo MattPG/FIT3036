@@ -180,5 +180,4 @@ public class MapController implements MapComponentInitializedListener {
 			return count;
 		}
 	}
-	
 }
