@@ -87,7 +87,7 @@ public class MapController implements MapComponentInitializedListener {
                 .overviewMapControl(true)
                 .panControl(false)
                 .rotateControl(false)
-                .scaleControl(false)
+                .scaleControl(true)
                 .streetViewControl(false)
                 .zoomControl(true)
                 .mapType(MapTypeIdEnum.ROADMAP);

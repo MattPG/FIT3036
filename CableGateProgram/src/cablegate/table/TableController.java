@@ -83,14 +83,22 @@ public class TableController {
 	}
 	
 	@ActionMethod("NextPage")
-	public void onNextPage(){	
-		prepareQuery(currPage+1, DEFAULT_QUERY, (String[]) null);
+	public void onNextPage(){
+		if(isTextSearch()){
+			prepareQuery(currPage+1, textQuery, Cable.HEADER_ARRAY);		
+		}else{	
+			prepareQuery(currPage+1, DEFAULT_QUERY, (String[]) null);
+		}
 		refresh();
 	}
 	
 	@ActionMethod("PrevPage")
 	public void onPrevPage(){
-		prepareQuery(currPage-1, DEFAULT_QUERY, (String[]) null);
+		if(isTextSearch()){
+			prepareQuery(currPage-1, textQuery, Cable.HEADER_ARRAY);	
+		}else{		
+			prepareQuery(currPage-1, DEFAULT_QUERY, (String[]) null);
+		}
 		refresh();
 	}
 	
@@ -130,7 +138,7 @@ public class TableController {
 	private void updateTable(){
 		List<Cable> cables = null;
 		
-		if(queryFields != null){
+		if(isTextSearch()){
 			cables = DatabaseManager.searchText(textQuery, NUM_ELEMENTS_PER_PAGE, NUM_ELEMENTS_PER_PAGE*currPage, queryFields);
 		}else{
 			cables = DatabaseManager.query(textQuery, NUM_ELEMENTS_PER_PAGE, NUM_ELEMENTS_PER_PAGE*currPage);
@@ -139,6 +147,10 @@ public class TableController {
 		if(cables != null){
 			tableData.setAll(cables);
 		}
+	}
+	
+	private boolean isTextSearch(){
+		return queryFields != null;
 	}
 	
 	/*
