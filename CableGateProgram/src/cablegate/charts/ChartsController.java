@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -27,7 +26,6 @@ import javax.annotation.PostConstruct;
 
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.TermFreqVector;
-import org.apache.lucene.index.TermVectorEntry;
 import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.ActionMethod;
 import org.datafx.controller.flow.action.ActionTrigger;
@@ -56,19 +54,12 @@ public class ChartsController {
 	private PieChart classChart;
 	
 	private Set<String> stopWords;
-	private Comparator<TermVectorEntry> comparatorTVE;
 	private Map<String, String> countries;
 	
 	@PostConstruct
 	public void init(){
 		stopWords = getStopWords();
 		countries = getCountriesList();
-        comparatorTVE = new Comparator<TermVectorEntry>() {
-			@Override
-			public int compare(TermVectorEntry o1, TermVectorEntry o2) {
-				return Integer.compare(o2.getFrequency(), o1.getFrequency());
-			}
-		};
 	}
 	
 	@ActionMethod("Refresh")
