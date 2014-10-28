@@ -98,7 +98,7 @@ public class TagCloudController {
         int added = 0;
         while(it.hasNext() && added<MAX_TAGS){
         	TermVectorEntry tve = it.next();
-        	if(!stopWords.contains(tve.getTerm()) && tve.getFrequency()>5){
+        	if(!stopWords.contains(tve.getTerm()) && tve.getFrequency() > 1){
         		tagCloud.addTag(new Tag(tve.getTerm(), tve.getFrequency()));
         	}
         }

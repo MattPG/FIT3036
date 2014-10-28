@@ -6,9 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -23,7 +26,7 @@ import javafx.scene.control.Button;
 import javax.annotation.PostConstruct;
 
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.SortedTermVectorMapper;
+import org.apache.lucene.index.TermFreqVector;
 import org.apache.lucene.index.TermVectorEntry;
 import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.ActionMethod;
@@ -83,34 +86,64 @@ public class ChartsController {
 	
 	private void refreshCountriesChart(IndexReader indexReader){
 		// Get the terms of the curr data set
-       SortedTermVectorMapper map = new SortedTermVectorMapper(true, true, comparatorTVE);
-       TableController.tableData.forEach(c -> {
-       	try {
-				indexReader.getTermFreqVector(c.getCableID()-1, map);
-			} catch (Exception e1) {
+		Map<String, Counter> termsMap = new HashMap<String, Counter>();
+		TableController.tableData.forEach(c -> {
+			TermFreqVector tveArray[] = null;
+			
+			try {
+				tveArray = indexReader.getTermFreqVectors(c.getCableID()-1);
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				e.printStackTrace();
 			}
-       });
+			
+			Arrays.asList(tveArray).forEach(tve -> {
+				String terms[] = tve.getTerms();
+				int counts[] = tve.getTermFrequencies();
+				Counter count;
+				for(int i=0; i < tve.size(); i++){
+					count = termsMap.get(terms[i]);
+					if(count == null){
+						termsMap.put(terms[i], new Counter(counts[i]));
+					}else{
+						count.add(counts[i]);
+					}
+				}
+			});
+		});
        
        // Extract just the countries and count them together
-		List<TermVectorEntry> list = new ArrayList<TermVectorEntry>(map.getTermVectorEntrySet());
-		Map<String, Counter> freqs = new HashMap<String, Counter>();
-		list.forEach(tve -> {
-			String country = countries.get(tve.getTerm());
+		
+		Map<String, Counter> countryCount = new HashMap<String, Counter>();
+		termsMap.forEach((t, c) -> {
+			String country = countries.get(t);
 			if(country != null){
-				Counter count = freqs.get(country);
+				Counter count = countryCount.get(country);
 				if(count == null){
-					freqs.put(country, new Counter(tve.getFrequency()));
+					countryCount.put(country, c);
 				}
 			}
 		});
 		
+		List<Country> countrySet = new ArrayList<Country>(100);
+		countryCount.forEach((s, c) -> {
+			countrySet.add(new Country(s, c.getCount()));
+		});
+		
+		Collections.sort(countrySet);
+		countrySet.forEach(c -> System.out.println(c));
+		
 		// Plot the frequencies
 		Series<String, Integer> countryData = new Series<String, Integer>();
-		freqs.forEach((c, f) -> {
-			countryData.getData().add(new XYChart.Data<>(c, f.getCount()));
-		});
+		Iterator<Country> it = countrySet.iterator();
+		int max = 15;
+		int count = 0;
+		while(it.hasNext() && count < max){
+			count++;
+			Country cunt = it.next();
+			countryData.getData().add(new XYChart.Data<>(cunt.getName(), cunt.getCount()));
+		}
+		
 		countChart.getData().clear();
 		countChart.getData().add(countryData);
 		countChart.setLegendVisible(false);
@@ -118,25 +151,21 @@ public class ChartsController {
 	
 	private void refreshPieChart(IndexReader indexReader){
 		// Get the terms of the curr data set
-       SortedTermVectorMapper map = new SortedTermVectorMapper(true, true, comparatorTVE);
+		Map<String, Counter> map = new HashMap<String, Counter>();
        TableController.tableData.forEach(c -> {
-       	try {
-				indexReader.getTermFreqVector(c.getCableID()-1, "classification", map);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+    	   String classification = c.getClassification();
+    	   Counter counter = map.get(classification);
+    	   if(counter == null){
+    		   map.put(classification, new Counter(1));
+    	   }else{
+    		   counter.increment();
+    	   }
        });
        
-       // Extract just the countries and count them together
-		List<TermVectorEntry> list = new ArrayList<TermVectorEntry>(map.getTermVectorEntrySet());
-		Map<String, Integer> freqs = new HashMap<String, Integer>();
-		list.forEach(tve -> freqs.put(tve.getTerm(), tve.getFrequency()));
-		
 		// Plot the frequencies
 		Collection<PieChart.Data> classData = new ArrayList<PieChart.Data>(10);
-		freqs.forEach((c, f) -> {
-			classData.add(new PieChart.Data(c, f));
+		map.forEach((c, f) -> {
+			classData.add(new PieChart.Data(c, f.getCount()));
 		});
 		classChart.getData().clear();
 		classChart.getData().addAll(classData);
@@ -189,6 +218,14 @@ public class ChartsController {
 	private class Counter{
 		private int count;
 		
+		public void add(int toAdd){
+			count += toAdd;
+		}
+		
+		public void increment(){
+			count++;
+		}
+		
 		public Counter(int count){
 			this.count = count;
 		}
@@ -196,5 +233,35 @@ public class ChartsController {
 		public int getCount(){
 			return count;
 		}
+	}
+	
+	private class Country implements Comparable<Country>{
+		
+		private String name;
+		private Integer count;
+		
+		public Country(String name, Integer count){
+			this.name = name;
+			this.count = count;
+		}
+		
+		public String getName(){
+			return name;
+		}
+		
+		public Integer getCount(){
+			return count;
+		}
+		
+		@Override
+		public String toString(){
+			return name + " " + count;
+		}
+
+		@Override
+		public int compareTo(Country o) {
+			return o.getCount().compareTo(count);
+		}
+		
 	}
 }
